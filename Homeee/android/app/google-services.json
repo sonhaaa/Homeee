@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "226417426565",
+    "firebase_url": "https://homeee-25d49.firebaseio.com",
+    "project_id": "homeee-25d49",
+    "storage_bucket": "homeee-25d49.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:226417426565:android:dd31dd1991b8187ad769ec",
+        "android_client_info": {
+          "package_name": "com.homeee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "226417426565-p5jcn21m978sd2msc3huvovg4da65d6s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.homeee",
+            "certificate_hash": "522483cef23f054f2129674201329eac9e981e33"
+          }
+        },
+        {
+          "client_id": "226417426565-65ruru54und9du1nnrt6il6kf42pno0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp9huJi_a-LRJs1FB5RTm0_njw5_NuR8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "226417426565-65ruru54und9du1nnrt6il6kf42pno0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

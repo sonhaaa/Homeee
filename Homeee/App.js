@@ -1,114 +1,111 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import database, { firebase } from '@react-native-firebase/database';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+    };
+  }
+
+  handleEmail = text => {
+    this.setState({ email: text });
+
+  };
+  handlePassword = text => {
+    this.setState({ password: text });
+  };
+
+  async writeData(email, password) {
+    const uid = auth().currentUser.uid;
+    const ref = database().ref(`Users/${uid}`);
+    await ref.set({
+      email: email,
+      password: password,
+      onCreate: 'true'
+    })
+  }
+
+  logIn(email, password) {
+    auth().signInWithEmailAndPassword(email, password).then(alert(email)).catch(function (error) {
+      // Handle Errors here.
+      console.log('err');
+    });
+  }
+
+  signUp(email, password) {
+    auth().createUserWithEmailAndPassword(email, password).then(this.writeData(email, password)).catch(function (error) {
+      // Handle Errors here.
+      console.log('err');
+    });
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholder="Email"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          value={this.state.email}
+          onChangeText={this.handleEmail}
+        />
+        <TextInput
+          style={styles.input}
+          underlineColorAndroid="transparent"
+          placeholder="Password"
+          placeholderTextColor="black"
+          autoCapitalize="none"
+          secureTextEntry={true}
+          value={this.state.password}
+          onChangeText={this.handlePassword}
+        />
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => this.logIn(this.state.email, this.state.password)}
+        >
+          <Text style={styles.submitButtonText}> Submit </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={() => this.signUp(this.state.email, this.state.password)}
+        >
+          <Text style={styles.submitButtonText}> SignUp </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  container: {
+    flex: 2,
+    justifyContent: "center",
+    // alignItems: "center",
+    backgroundColor: "#F5FCFF"
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  input: {
+    margin: 15,
+    height: 40,
+    borderColor: "black",
+    borderWidth: 1
   },
-  body: {
-    backgroundColor: Colors.white,
+  submitButton: {
+    backgroundColor: "black",
+    padding: 10,
+    margin: 15,
+    alignItems: "center",
+    height: 40
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  submitButtonText: {
+    color: "white"
+  }
 });
-
-export default App;
