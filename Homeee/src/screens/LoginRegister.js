@@ -8,6 +8,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import FillInformation from './FillInformation';
+import PushNotificationConfig from '../utils/PushNotificationConfig';
+
+
 
 class LoginRegisterScreen extends Component {
     constructor(props) {
@@ -15,6 +18,7 @@ class LoginRegisterScreen extends Component {
         this.state = {
             email: '',
             password: '',
+            count: 1,
 
         };
     }
@@ -60,6 +64,20 @@ class LoginRegisterScreen extends Component {
             });
     }
 
+    handleNoti() {
+        const config = PushNotificationConfig.configure();
+        var up = this.state.count + 1;
+        this.setState({ count: up })
+        config.localNotificationSchedule({
+            message: this.state.count.toString(),
+            color: "red",
+            bigText: "My big text that will be shown when notification is expanded",
+            subText: "This is a subText",
+            ticker: "My Notification Ticker",
+            date: new Date(Date.now() + 5000)
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -93,6 +111,12 @@ class LoginRegisterScreen extends Component {
                     onPress={() => this.signUp(this.state.email, this.state.password)}
                 >
                     <Text style={styles.submitButtonText}> SignUp </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={() => this.handleNoti()}
+                >
+                    <Text style={styles.submitButtonText}> Noti </Text>
                 </TouchableOpacity>
             </View>
         )
