@@ -9,8 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import FillInformation from './FillInformation';
 import PushNotificationConfig from '../utils/PushNotificationConfig';
-
-
+import MapScreen from './MapScreen';
 
 class LoginRegisterScreen extends Component {
     constructor(props) {
@@ -155,7 +154,7 @@ function LoginRegister() {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='LoginRegisterScreen' component={LoginRegisterScreen} />
-                <Stack.Screen name='FillInformationScreen' component={FillInformation} />
+                <Stack.Screen name='FillInformationScreen' component={MapScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )
