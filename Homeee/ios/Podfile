@@ -38,6 +38,8 @@ target 'Homeee' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
+
   target 'HomeeeTests' do
     inherit! :search_paths
     # Pods for testing

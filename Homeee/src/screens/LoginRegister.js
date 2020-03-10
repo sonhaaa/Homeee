@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 
 import auth from '@react-native-firebase/auth';
 import database, { firebase } from '@react-native-firebase/database';
@@ -18,7 +18,7 @@ class LoginRegisterScreen extends Component {
             email: '',
             password: '',
             count: 1,
-
+            processing: '',
         };
     }
 
@@ -36,20 +36,34 @@ class LoginRegisterScreen extends Component {
         ref.set({
             Email: email,
             Password: password,
-            onCreate: 'true'
+            onCreate: 'true',
         })
     }
 
     logIn(email, password) {
         auth().signInWithEmailAndPassword(email, password)
             .then(() =>
+
                 this.props.navigation.navigate('FillInformationScreen')
             )
-            .catch(function (error) {
-                alert('ko login');
-                console.log('err', error);
+            .catch(function () {
+                Alert.alert(
+                    'Alert Title',
+                    'My Alert Msg',
+                    [
+                        { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+                        {
+                            text: 'Cancel',
+                            onPress: () => this.setState({ processing: 'Check lai' }),
+                            style: 'cancel',
+                        },
+                        { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ],
+                    { cancelable: false },
+                );
             });
     }
+
 
     signUp(email, password) {
         auth().createUserWithEmailAndPassword(email, password)
@@ -57,9 +71,23 @@ class LoginRegisterScreen extends Component {
                 this.writeData(email, password),
                     this.props.navigation.navigate('FillInformationScreen')
             })
-            .catch(function (error) {
+            .catch(function () {
                 // Handle Errors here.
-                console.log('err');
+                Alert.alert(
+                    'Alert Title',
+                    'My Alert Msg',
+                    [
+                        { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+                        {
+                            text: 'Cancel',
+                            // onPress: () => this.setState({ processing: 'Check lai ...' }),
+                            onPress: () => console.log('Ask me later pressed'),
+                            style: 'cancel',
+                        },
+                        { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ],
+                    { cancelable: false },
+                );
             });
     }
 
@@ -73,7 +101,7 @@ class LoginRegisterScreen extends Component {
             bigText: "My big text that will be shown when notification is expanded",
             subText: "This is a subText",
             ticker: "My Notification Ticker",
-            date: new Date(Date.now() + 5000)
+            date: new Date(Date.now() + 1000)
         });
     }
 
@@ -99,6 +127,7 @@ class LoginRegisterScreen extends Component {
                     value={this.state.password}
                     onChangeText={this.handlePassword}
                 />
+                <Text> {this.state.processing} </Text>
                 <TouchableOpacity
                     style={styles.submitButton}
                     onPress={() => this.logIn(this.state.email, this.state.password)}
@@ -107,7 +136,7 @@ class LoginRegisterScreen extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={() => this.signUp(this.state.email, this.state.password)}
+                    onPress={() => { this.signUp(this.state.email, this.state.password), this.setState({ processing: 'Signup ...' }) }}
                 >
                     <Text style={styles.submitButtonText}> SignUp </Text>
                 </TouchableOpacity>
@@ -154,7 +183,7 @@ function LoginRegister() {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='LoginRegisterScreen' component={LoginRegisterScreen} />
-                <Stack.Screen name='FillInformationScreen' component={MapScreen} />
+                <Stack.Screen name='FillInformationScreen' component={FillInformation} />
             </Stack.Navigator>
         </NavigationContainer>
     )
