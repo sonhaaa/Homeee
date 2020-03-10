@@ -9,7 +9,6 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import FillInformation from './FillInformation';
 import PushNotificationConfig from '../utils/PushNotificationConfig';
-import MapScreen from './MapScreen';
 
 class LoginRegisterScreen extends Component {
     constructor(props) {
@@ -41,54 +40,66 @@ class LoginRegisterScreen extends Component {
     }
 
     logIn(email, password) {
-        auth().signInWithEmailAndPassword(email, password)
-            .then(() =>
+        if (this.state.email || this.state.password != "") {
+            auth().signInWithEmailAndPassword(email, password)
+                .then(() =>
 
-                this.props.navigation.navigate('FillInformationScreen')
-            )
-            .catch(function () {
-                Alert.alert(
-                    'Alert Title',
-                    'My Alert Msg',
-                    [
-                        { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
-                        {
-                            text: 'Cancel',
-                            onPress: () => this.setState({ processing: 'Check lai' }),
-                            style: 'cancel',
-                        },
-                        { text: 'OK', onPress: () => console.log('OK Pressed') },
-                    ],
-                    { cancelable: false },
-                );
-            });
+                    this.props.navigation.navigate('FillInformationScreen')
+                )
+                .catch(function () {
+                    Alert.alert(
+                        'Khong the Dang Nhap',
+                        'My Alert Msg',
+                        [
+                            { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+                            {
+                                text: 'Cancel',
+                                onPress: () => this.setState({ processing: 'Check lai' }),
+                                style: 'cancel',
+                            },
+                            { text: 'OK', onPress: () => console.log('OK Pressed') },
+                        ],
+                        { cancelable: false },
+                    );
+                })
+        }
+        else {
+            alert('Pls dien day du')
+        }
     }
 
 
     signUp(email, password) {
-        auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                this.writeData(email, password),
-                    this.props.navigation.navigate('FillInformationScreen')
-            })
-            .catch(function () {
-                // Handle Errors here.
-                Alert.alert(
-                    'Alert Title',
-                    'My Alert Msg',
-                    [
-                        { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
-                        {
-                            text: 'Cancel',
-                            // onPress: () => this.setState({ processing: 'Check lai ...' }),
-                            onPress: () => console.log('Ask me later pressed'),
-                            style: 'cancel',
-                        },
-                        { text: 'OK', onPress: () => console.log('OK Pressed') },
-                    ],
-                    { cancelable: false },
-                );
-            });
+        if (this.state.password || this.state.email != "") {
+            auth().createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    this.writeData(email, password),
+                        this.props.navigation.navigate('FillInformationScreen')
+                })
+                .catch(function (err) {
+                    // Handle Errors here.
+                    Alert.alert(
+                        'Khong the dang ki',
+                        'My Alert Msg',
+                        [
+                            { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+                            {
+                                text: 'Cancel',
+                                // onPress: () => this.setState({ processing: 'Check lai ...' }),
+                                onPress: () => console.log('Ask me later pressed'),
+                                style: 'cancel',
+                            },
+                            { text: 'OK', onPress: () => console.log('OK Pressed') },
+                        ],
+                        { cancelable: false },
+                    );
+                    console.log(err);
+
+                })
+        }
+        else {
+            alert('ple check lai nhe')
+        }
     }
 
     handleNoti() {
@@ -136,7 +147,7 @@ class LoginRegisterScreen extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.submitButton}
-                    onPress={() => { this.signUp(this.state.email, this.state.password), this.setState({ processing: 'Signup ...' }) }}
+                    onPress={() => { this.signUp(this.state.email, this.state.password) }}
                 >
                     <Text style={styles.submitButtonText}> SignUp </Text>
                 </TouchableOpacity>
@@ -181,7 +192,7 @@ const Stack = createStackNavigator();
 function LoginRegister() {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Navigator screenOptions={{ headerShown: false }} >
                 <Stack.Screen name='LoginRegisterScreen' component={LoginRegisterScreen} />
                 <Stack.Screen name='FillInformationScreen' component={FillInformation} />
             </Stack.Navigator>
