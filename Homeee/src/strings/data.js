@@ -1,17 +1,17 @@
 export const District = [{
-    value: 'Fruit',
+    value: 'An Giang',
     // label: 'Banana'
 }, {
-    value: 'Vegetable',
+    value: 'Vung Tau',
     // label: 'Tomato'
 }, {
-    value: 'Fruit',
+    value: 'Quang Tri',
     //label: 'Pear'
 }, {
-    value: 'Fruit',
+    value: 'Hue',
     //label: 'Pear'
 }, {
-    value: 'Fruit',
+    value: 'Da Nang',
     //label: 'Pear'
 }, {
     value: 'Fruit',

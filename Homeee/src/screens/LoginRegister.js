@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import auth from '@react-native-firebase/auth';
 import database, { firebase } from '@react-native-firebase/database';
@@ -8,6 +9,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import FillInformation from './FillInformation';
+import HomeScreen from './HomeScreen';
+
 import PushNotificationConfig from '../utils/PushNotificationConfig';
 
 class LoginRegisterScreen extends Component {
@@ -16,8 +19,9 @@ class LoginRegisterScreen extends Component {
         this.state = {
             email: '',
             password: '',
-            count: 1,
+            userData: {},
             processing: '',
+            visible: false,
         };
     }
 
@@ -39,41 +43,73 @@ class LoginRegisterScreen extends Component {
         })
     }
 
+    async storeEmail(userEmail) {
+        try {
+            await AsyncStorage.setItem('userEmail', userEmail)
+        } catch (err) {
+            console.log("Error: ", err);
+        }
+    }
+
+    async storePassword(userPasword) {
+        try {
+            await AsyncStorage.setItem('userPassword', userPasword)
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async getToken() {
+        try {
+            let getEmail = await AsyncStorage.getItem('userEmail');
+            let userPassword = await AsyncStorage.getItem('userPassword');
+            let userEmail = JSON.parse(getEmail);
+            this.setState({ email: userEmail, password: userPassword })
+        } catch (err) {
+            console.log('Error: ', err);
+        }
+    }
+
+    componentDidMount() {
+        this.getToken();
+    }
+
     logIn(email, password) {
-        if (this.state.email || this.state.password != "") {
+        if (this.state.email && this.state.password !== "") {
             auth().signInWithEmailAndPassword(email, password)
                 .then(() =>
-
-                    this.props.navigation.navigate('FillInformationScreen')
+                    this.props.navigation.navigate('HomeScreen')
                 )
                 .catch(function () {
                     Alert.alert(
                         'Khong the Dang Nhap',
                         'My Alert Msg',
                         [
-                            { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
                             {
                                 text: 'Cancel',
-                                onPress: () => this.setState({ processing: 'Check lai' }),
+                                onPress: () => console.log('cancel pressed'),
                                 style: 'cancel',
                             },
                             { text: 'OK', onPress: () => console.log('OK Pressed') },
                         ],
                         { cancelable: false },
                     );
-                })
+                });
         }
         else {
             alert('Pls dien day du')
+            //this.handleShowToast()
         }
     }
 
 
     signUp(email, password) {
-        if (this.state.password || this.state.email != "") {
+        if (this.state.password && this.state.email !== "") {
             auth().createUserWithEmailAndPassword(email, password)
-                .then(() => {
-                    this.writeData(email, password),
+                .then((res) => {
+                    this.storeEmail(JSON.stringify(res.user.email)),
+                        this.storePassword(this.state.password),
+                        this.writeData(email, password),
                         this.props.navigation.navigate('FillInformationScreen')
                 })
                 .catch(function (err) {
@@ -82,7 +118,6 @@ class LoginRegisterScreen extends Component {
                         'Khong the dang ki',
                         'My Alert Msg',
                         [
-                            { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
                             {
                                 text: 'Cancel',
                                 // onPress: () => this.setState({ processing: 'Check lai ...' }),
@@ -99,6 +134,7 @@ class LoginRegisterScreen extends Component {
         }
         else {
             alert('ple check lai nhe')
+
         }
     }
 
@@ -107,7 +143,7 @@ class LoginRegisterScreen extends Component {
         var up = this.state.count + 1;
         this.setState({ count: up })
         config.localNotificationSchedule({
-            message: this.state.count.toString(),
+            message: 'hello',
             color: "red",
             bigText: "My big text that will be shown when notification is expanded",
             subText: "This is a subText",
@@ -119,6 +155,7 @@ class LoginRegisterScreen extends Component {
     render() {
         return (
             <View style={styles.container}>
+                {/* <Toast visible={this.state.visible} message='Check lai'/> */}
                 <TextInput
                     style={styles.input}
                     underlineColorAndroid="transparent"
@@ -170,7 +207,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#F5FCFF"
     },
     input: {
-        margin: 15,
+        // margin: 15,
         height: 40,
         borderColor: "black",
         borderWidth: 1
@@ -178,7 +215,7 @@ const styles = StyleSheet.create({
     submitButton: {
         backgroundColor: "black",
         padding: 10,
-        margin: 15,
+        // margin: 15,
         alignItems: "center",
         height: 40
     },
@@ -195,6 +232,7 @@ function LoginRegister() {
             <Stack.Navigator screenOptions={{ headerShown: false }} >
                 <Stack.Screen name='LoginRegisterScreen' component={LoginRegisterScreen} />
                 <Stack.Screen name='FillInformationScreen' component={FillInformation} />
+                <Stack.Screen name='HomeScreen' component={HomeScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )
