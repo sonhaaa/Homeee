@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Alert, BackHandler } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import FindPeopleAround from './FindPeopleAround';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
 class Hope extends Component {
     constructor(props) {
@@ -24,6 +24,26 @@ class Hope extends Component {
                 <TouchableOpacity style={styles.find} onPress={() => this.handleFindButton()}>
                     <Text>Find</Text>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
+                    <Text>Find</Text>
+                </TouchableOpacity>
+                <RBSheet
+                    ref={ref => {
+                        this.Scrollable = ref;
+                    }}
+                    closeOnDragDown
+                    customStyles={{
+                        container: {
+                            borderTopLeftRadius: 10,
+                            borderTopRightRadius: 10,
+                            height: 500
+                        }
+                    }}
+                >
+                    <ScrollView>
+                        <FindPeopleAround />
+                    </ScrollView>
+                </RBSheet>
             </View>
         );
     }

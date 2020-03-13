@@ -1,7 +1,7 @@
-import React, { Component, useCallback, useEffect } from 'react';
-import { BackHandler, Alert } from "react-native";
+import React, { Component } from 'react';
+// import { BackHandler, Alert } from "react-native";
 
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import { NavigationContainer, } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -12,24 +12,6 @@ import HappyScreen from './HappyScreen';
 const Tab = createMaterialBottomTabNavigator();
 
 export default class HomeScreen extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.handleBackButtonPress = this.handleBackButtonPress.bind(this);
-    // }
-
-    // componentDidMount() {
-    //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonPress);
-    // }
-    // componentWillMount() {
-    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonPress);
-    // }
-
-    // handleBackButtonPress() {
-    //     //BackHandler.exitApp()
-    //     this.props.navigation.goBack(null);
-    //     return true;
-    // }
-
     render() {
         return (
             <NavigationContainer independent={true}>
@@ -60,26 +42,3 @@ export default class HomeScreen extends Component {
         );
     }
 }
-
-// export default class HomeScreen extends Component {
-
-//     componentDidMount() {
-//         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-//             //this.goBack(); // works best when the goBack is async
-//             BackHandler.exitApp()
-//         });
-//     }
-
-//     componentWillUnmount() {
-//         this.backHandler.remove();
-//     }
-
-//     render() {
-//         return (
-//             // <MyTabs />
-//             <NavigationContainer independent={true}>
-//                 <MyTabs />
-//             </NavigationContainer>
-//         );
-//     }
-// }

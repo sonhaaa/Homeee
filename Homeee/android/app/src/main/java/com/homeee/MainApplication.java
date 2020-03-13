@@ -12,6 +12,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+// import com.bottomsheetbehavior.BottomSheetBehaviorPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -30,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           // packages.add(new MainReactPackage());
           // packages.add(new ReactNativeFirebaseMessagingPackage());
+
+          // packages.add(new BottomSheetBehaviorPackage());
           return packages;
         }
 
