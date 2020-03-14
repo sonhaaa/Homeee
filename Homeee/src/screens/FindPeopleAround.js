@@ -6,6 +6,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 import database, { firebase } from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
+// import { red100 } from 'react-native-paper/lib/typescript/src/styles/colors';
 
 class FindPeopleAround extends Component {
     constructor(props) {
@@ -17,46 +18,75 @@ class FindPeopleAround extends Component {
             longitudeDelta: 0.05,
             currentDistrict: '',
             homeTown: '',
+            homeDistrict: '',
             allUsersData: {},
-            name: []
+            Uids: new Set(),
+            usersAround: new Set()
         };
     };
 
     getUsername(userId) {
-        firebase.database()
-            .ref('/Users/' + userId).once('value')
-            // .then(snapshot => console.log(snapshot.val().userName));
-            .then(snapshot => console.log(snapshot.val().userName));
+        return this.state.allUsersData[userId].userName;
     }
 
-    filterCurrentDistrict() {
+    filterUsers(param) {
         var ref = firebase.database().ref("Users");
-        ref.orderByChild("currentDistrict")
+        ref.orderByChild(param)
             .equalTo(this.state.currentDistrict)
-            .on("child_added", snapshot => this.getUsername(snapshot.key));
-        console.log('filterHomeDistrict called');
+            .on("child_added", snapshot => this.setState({ Uids: this.state.Uids.add(snapshot.key) }));
     }
 
-    getUserPlacesInfoFromRNF() {
+    loadAllUsersData = () => {
+        firebase.database().ref('/Users/')
+            .once('value')
+            .then(snapshot => {
+                this.setState({ allUsersData: snapshot.val() })
+            })
+    }
+
+    getUserPlacesInfo() {
         const userId = firebase.auth().currentUser.uid;
         firebase.database().ref('/Users/' + userId)
             .once('value')
             .then(snapshot => {
-                this.setState({ currentDistrict: snapshot.val().currentDistrict }),
-                    this.filterCurrentDistrict()
+                const snapShotVal = snapshot.val();
+                this.setState({
+                    currentDistrict: snapShotVal.currentDistrict,
+                    homeDistrict: snapShotVal.homeDistrict,
+                    homeTown: snapShotVal.homeTown
+                }),
+                    this.filterUsers('currentDistrict');
             })
-
-        console.log('getUserPlacesInfoFromRNF called')
     };
 
-    // getLocation() {
-    //     Geolocation.getCurrentPosition(info => {
-    //         this.setState({
-    //             latitude: info.coords.latitude,
-    //             longitude: info.coords.longitude
-    //         })
-    //     }, err => console.log(err.message), { timeout: 20000, maximumAge: 1000 });
-    // };
+    findUsersAround = () => {
+        const currentUserId = auth().currentUser.uid;
+        this.getUserPlacesInfo();
+        this.loadAllUsersData();
+        this.state.Uids.forEach(userId => {
+            if (userId !== currentUserId) {
+                if (this.state.allUsersData[userId].homeTown === this.state.homeTown) {
+                    this.state.usersAround.add(this.getUsername(userId))
+                    //console.log("HomeTown: " + this.getUsername(userId))
+                } else if (this.state.allUsersData[userId].homeDistrict === this.state.homeDistrict) {
+                    console.log("HomeDistrict: " + this.getUsername(userId))
+                }
+            }
+        })
+    }
+
+    renderUser = (user) => {
+        return (<Text> {user} </Text>)
+    }
+
+    getLocation() {
+        Geolocation.getCurrentPosition(info => {
+            this.setState({
+                latitude: info.coords.latitude,
+                longitude: info.coords.longitude
+            })
+        }, err => console.log(err.message), { timeout: 20000, maximumAge: 1000 });
+    };
 
     onRegionChange(region) {
         this.setState({ region });
@@ -92,9 +122,12 @@ class FindPeopleAround extends Component {
                 </View> */}
                 <Text> latitude: {latitude} </Text>
                 <Text> longitude: {longitude} </Text>
-                <TouchableOpacity style={styles.findButton} onPress={() => this.getUserPlacesInfoFromRNF()}>
+                <TouchableOpacity style={styles.findButton} onPress={this.findUsersAround}>
                     <Text style={styles.findText}> FIND </Text>
                 </TouchableOpacity>
+                <View style={{ backgroundColor: 'green', height: 70, width: 300 }}>
+
+                </View>
             </View >
         );
     }
@@ -103,7 +136,9 @@ class FindPeopleAround extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        justifyContent: "center",
+        alignItems: "center"
     },
     map: {
         flex: 1,
