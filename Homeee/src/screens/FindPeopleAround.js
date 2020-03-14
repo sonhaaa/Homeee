@@ -15,34 +15,38 @@ class FindPeopleAround extends Component {
             longitude: 107,
             latitudeDelta: 0.095,
             longitudeDelta: 0.05,
-            homeDistrict: '',
+            currentDistrict: '',
             homeTown: '',
             allUsersData: {},
-            name: [1]
+            name: []
         };
     };
 
-    getUsername = (userId) => {
+    getUsername(userId) {
         firebase.database()
             .ref('/Users/' + userId).once('value')
             // .then(snapshot => console.log(snapshot.val().userName));
-            .then(snapshot => console.log(this.state.name.push(snapshot.val().userName)))
+            .then(snapshot => console.log(snapshot.val().userName));
     }
 
-    filterHomeDistrict = () => {
+    filterCurrentDistrict() {
         var ref = firebase.database().ref("Users");
-        ref.orderByChild("homeDistrict")
-            .equalTo(this.state.homeDistrict)
+        ref.orderByChild("currentDistrict")
+            .equalTo(this.state.currentDistrict)
             .on("child_added", snapshot => this.getUsername(snapshot.key));
+        console.log('filterHomeDistrict called');
     }
 
-    getUserPlacesInfoFromRNF = () => {
+    getUserPlacesInfoFromRNF() {
         const userId = firebase.auth().currentUser.uid;
         firebase.database().ref('/Users/' + userId)
             .once('value')
-            .then(snapshot => this.setState({ homeDistrict: snapshot.val().homeDistrict }))
-        // .then(snapshot => this.state.name.pus }))
-        this.filterHomeDistrict();
+            .then(snapshot => {
+                this.setState({ currentDistrict: snapshot.val().currentDistrict }),
+                    this.filterCurrentDistrict()
+            })
+
+        console.log('getUserPlacesInfoFromRNF called')
     };
 
     // getLocation() {
@@ -88,7 +92,7 @@ class FindPeopleAround extends Component {
                 </View> */}
                 <Text> latitude: {latitude} </Text>
                 <Text> longitude: {longitude} </Text>
-                <TouchableOpacity style={styles.findButton} onPress={this.getUserPlacesInfoFromRNF}>
+                <TouchableOpacity style={styles.findButton} onPress={() => this.getUserPlacesInfoFromRNF()}>
                     <Text style={styles.findText}> FIND </Text>
                 </TouchableOpacity>
             </View >
