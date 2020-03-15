@@ -6,6 +6,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 import FindPeopleAround from './FindPeopleAround';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import DiaryScreen from './DiaryScreen';
 
 class Hope extends Component {
     constructor(props) {
@@ -21,9 +22,6 @@ class Hope extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity style={styles.find} onPress={() => this.handleFindButton()}>
-                    <Text>Find</Text>
-                </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
                     <Text>Find</Text>
                 </TouchableOpacity>
@@ -36,15 +34,19 @@ class Hope extends Component {
                         container: {
                             borderTopLeftRadius: 10,
                             borderTopRightRadius: 10,
-                            height: 500
                         }
                     }}
+                    height={550}
+                    duration={350}
                 >
                     <ScrollView>
                         <FindPeopleAround />
                     </ScrollView>
                 </RBSheet>
-            </View>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('DiaryScreen')} style={styles.find}>
+                    <Text style={{ color: 'white' }} >Diary</Text>
+                </TouchableOpacity>
+            </View >
         );
     }
 };
@@ -69,12 +71,11 @@ const Stack = createStackNavigator();
 
 function HopeScreen() {
     return (
-        // <NavigationContainer independent={true}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HopeScreen' component={Hope} />
             <Stack.Screen name='FindPeopleAroundScreen' component={FindPeopleAround} />
+            <Stack.Screen name='DiaryScreen' component={DiaryScreen} />
         </Stack.Navigator>
-        // </NavigationContainer>
     )
 }
 

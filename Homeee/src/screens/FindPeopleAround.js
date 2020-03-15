@@ -21,7 +21,7 @@ class FindPeopleAround extends Component {
             homeDistrict: '',
             allUsersData: {},
             Uids: new Set(),
-            usersAround: new Set()
+            usersAround: new Set(),
         };
     };
 
@@ -36,12 +36,13 @@ class FindPeopleAround extends Component {
             .on("child_added", snapshot => this.setState({ Uids: this.state.Uids.add(snapshot.key) }));
     }
 
-    loadAllUsersData = () => {
+    componentDidMount() {
         firebase.database().ref('/Users/')
             .once('value')
             .then(snapshot => {
                 this.setState({ allUsersData: snapshot.val() })
-            })
+            });
+        const userId = firebase.auth().currentUser.uid;
     }
 
     getUserPlacesInfo() {
@@ -62,12 +63,12 @@ class FindPeopleAround extends Component {
     findUsersAround = () => {
         const currentUserId = auth().currentUser.uid;
         this.getUserPlacesInfo();
-        this.loadAllUsersData();
         this.state.Uids.forEach(userId => {
             if (userId !== currentUserId) {
                 if (this.state.allUsersData[userId].homeTown === this.state.homeTown) {
                     this.state.usersAround.add(this.getUsername(userId))
-                    //console.log("HomeTown: " + this.getUsername(userId))
+                    console.log('add succed');
+                    console.log(this.state.usersAround);
                 } else if (this.state.allUsersData[userId].homeDistrict === this.state.homeDistrict) {
                     console.log("HomeDistrict: " + this.getUsername(userId))
                 }
@@ -75,8 +76,10 @@ class FindPeopleAround extends Component {
         })
     }
 
-    renderUser = (user) => {
-        return (<Text> {user} </Text>)
+    renderUser = () => {
+        var userArray = Array.from(this.state.usersAround);
+        // console.log(userArray)
+        userArray.map(user => console.log(user))
     }
 
     getLocation() {
@@ -126,7 +129,7 @@ class FindPeopleAround extends Component {
                     <Text style={styles.findText}> FIND </Text>
                 </TouchableOpacity>
                 <View style={{ backgroundColor: 'green', height: 70, width: 300 }}>
-
+                    {Array.from(this.state.usersAround).map(item => (<Text style={{ color: 'white' }}> {item} </Text>))}
                 </View>
             </View >
         );
