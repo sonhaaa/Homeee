@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
+import { TextInput, ScrollView } from 'react-native-gesture-handler';
 
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
@@ -10,7 +10,20 @@ class DiaryScreen extends Component {
         super(props);
         this.state = {
             inputNewDiary: '',
+            diariesData: [],
+            currentDay: '',
         };
+    };
+
+    async componentDidMount() {
+        const userId = auth().currentUser.uid;
+        database().ref('Users/' + userId + '/Diaries/').on("value", snapshot => {
+            let data = snapshot.val() ? Object.keys(snapshot.val()) : [];
+            let diaryItems = [...data];
+            this.setState({
+                diariesData: diaryItems,
+            });
+        });
     }
 
     getCurrentDay = () => {
@@ -18,18 +31,23 @@ class DiaryScreen extends Component {
         return `${day.getDate()}|${day.getMonth() + 1}|${day.getFullYear()}`;
     }
 
-    createNewDiary = () => {
+    pushNewDiary = () => {
         const currentDay = this.getCurrentDay();
         const userId = auth().currentUser.uid;
+        const content = this.state.inputNewDiary;
         const ref = database().ref('Users/' + userId + '/Diaries/' + currentDay);
-        ref.update({
-            content: this.state.inputNewDiary
+        ref.push({
+            content: content
         });
         this.setState({ inputNewDiary: '' })
+    }
+
+    createNewDiary = () => {
+        this.state.inputNewDiary === "" ? alert('Dien day du pls') : this.pushNewDiary()
     };
 
     render() {
-        const { inputNewDiary } = this.state;
+        const { inputNewDiary, diariesData } = this.state;
         return (
             <View style={styles.container}>
                 <Text style={styles.diary}>Diary</Text>
@@ -48,9 +66,13 @@ class DiaryScreen extends Component {
                     />
                 </View>
 
-                <View style={styles.createdDiaries}>
-
-                </View>
+                <ScrollView>
+                    {diariesData.length > 0 ? (
+                        diariesData.map(key => (<Text style={{ color: 'black' }}> {key} </Text>))
+                    ) : (
+                            <Text>No diary yet </Text>
+                        )}
+                </ScrollView>
             </View>
         );
     }

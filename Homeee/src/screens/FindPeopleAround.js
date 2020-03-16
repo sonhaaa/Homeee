@@ -76,12 +76,6 @@ class FindPeopleAround extends Component {
         })
     }
 
-    renderUser = () => {
-        var userArray = Array.from(this.state.usersAround);
-        // console.log(userArray)
-        userArray.map(user => console.log(user))
-    }
-
     getLocation() {
         Geolocation.getCurrentPosition(info => {
             this.setState({
