@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Switch } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import auth from '@react-native-firebase/auth';
-import database, { firebase } from '@react-native-firebase/database';
+import database from '@react-native-firebase/database';
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +12,9 @@ import FillInformation from './FillInformation';
 import HomeScreen from './HomeScreen';
 
 import PushNotificationConfig from '../utils/PushNotificationConfig';
+
+import { color } from '../assets/color/color';
+import { string } from '../strings/en';
 
 class LoginRegisterScreen extends Component {
     constructor(props) {
@@ -22,12 +25,20 @@ class LoginRegisterScreen extends Component {
             userData: {},
             processing: '',
             visible: false,
+            isLogin: true,
+            registerColor: 'red',
+            loginColor: 'green',
+            isDarkMode: false,
+            backgroundColor: color.lightBackgroundColor
         };
     }
 
+    changeMode = value => {
+        this.setState({ isDarkMode: value });
+    };
+
     handleEmail = text => {
         this.setState({ email: text });
-
     };
     handlePassword = text => {
         this.setState({ password: text });
@@ -102,7 +113,6 @@ class LoginRegisterScreen extends Component {
         }
     }
 
-
     signUp(email, password) {
         if (this.state.password && this.state.email !== "") {
             auth().createUserWithEmailAndPassword(email, password)
@@ -152,14 +162,37 @@ class LoginRegisterScreen extends Component {
         });
     }
 
+    handleChangeToRegister = () => {
+        this.setState({ isLogin: false, registerColor: 'green', loginColor: 'red' });
+    }
+
+    handleChangeToLogin = () => {
+        this.setState({ isLogin: true, loginColor: 'green', registerColor: 'red' })
+    }
+
     render() {
+        const { registerColor, loginColor, isLogin, isDarkMode } = this.state;
         return (
-            <View style={styles.container}>
-                {/* <Toast visible={this.state.visible} message='Check lai'/> */}
+            <View style={[styles.container,
+            { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
+                <Text>{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
+                <Switch
+                    style={{ marginTop: 30 }}
+                    onValueChange={this.changeMode}
+                    value={isDarkMode}
+                />
+                <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
+                    <TouchableOpacity onPress={this.handleChangeToLogin}>
+                        <Text style={{ color: loginColor }}>{string.login}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ paddingLeft: 15 }} onPress={this.handleChangeToRegister}>
+                        <Text style={{ color: registerColor }}>{string.register}</Text>
+                    </TouchableOpacity>
+                </View>
                 <TextInput
                     style={styles.input}
                     underlineColorAndroid="transparent"
-                    placeholder="Email"
+                    placeholder={string.email}
                     placeholderTextColor="black"
                     autoCapitalize="none"
                     value={this.state.email}
@@ -168,7 +201,7 @@ class LoginRegisterScreen extends Component {
                 <TextInput
                     style={styles.input}
                     underlineColorAndroid="transparent"
-                    placeholder="Password"
+                    placeholder={string.password}
                     placeholderTextColor="black"
                     autoCapitalize="none"
                     secureTextEntry={true}
@@ -176,24 +209,21 @@ class LoginRegisterScreen extends Component {
                     onChangeText={this.handlePassword}
                 />
                 <Text> {this.state.processing} </Text>
-                <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={() => this.logIn(this.state.email, this.state.password)}
-                >
-                    <Text style={styles.submitButtonText}> Submit </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={() => { this.signUp(this.state.email, this.state.password) }}
-                >
-                    <Text style={styles.submitButtonText}> SignUp </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={() => this.handleNoti()}
-                >
-                    <Text style={styles.submitButtonText}> Noti </Text>
-                </TouchableOpacity>
+                {isLogin ? (
+                    <TouchableOpacity
+                        style={styles.submitButton}
+                        onPress={() => this.logIn(this.state.email, this.state.password)}
+                    >
+                        <Text style={styles.submitButtonText}> {string.login} </Text>
+                    </TouchableOpacity>
+                ) : (
+                        <TouchableOpacity
+                            style={styles.submitButton}
+                            onPress={() => { this.signUp(this.state.email, this.state.password) }}
+                        >
+                            <Text style={styles.submitButtonText}> {string.register} </Text>
+                        </TouchableOpacity>
+                    )}
             </View>
         )
     }

@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
 import { createStackNavigator } from "@react-navigation/stack";
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import FindPeopleAround from './FindPeopleAround';
-import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import DiaryScreen from './DiaryScreen';
+
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+
+import { string } from '../strings/en';
 
 class Hope extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: '',
         };
+    }
+
+    componentDidMount() {
+        const userId = auth().currentUser.uid;
+        database().ref('Users/' + userId).on('value', snapshot => this.setState({ username: snapshot.val().userName }))
     }
 
     handleFindButton = () => {
@@ -20,10 +31,15 @@ class Hope extends Component {
     }
 
     render() {
+        const { username } = this.state
         return (
             <View style={styles.container}>
+                <View>
+                    <Text>{string.goodMorning}</Text>
+                    <Text> {username} </Text>
+                </View>
                 <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
-                    <Text>Find</Text>
+                    <Text>{string.findHomemate}</Text>
                 </TouchableOpacity>
                 <RBSheet
                     ref={ref => {
@@ -44,7 +60,7 @@ class Hope extends Component {
                     </ScrollView>
                 </RBSheet>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DiaryScreen')} style={styles.find}>
-                    <Text style={{ color: 'white' }} >Diary</Text>
+                    <Text style={{ color: 'white' }} > {string.diary} </Text>
                 </TouchableOpacity>
             </View >
         );

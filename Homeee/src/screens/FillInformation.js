@@ -8,10 +8,9 @@ import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
 
 import { createStackNavigator } from "@react-navigation/stack";
-// import { NavigationContainer } from "@react-navigation/native";
-// import HomeScreen from './HomeScreen';
 
 import HomeScreen from './HomeScreen';
+import { string } from '../strings/en';
 
 class FillInformationSceen extends Component {
     constructor(props) {
@@ -43,7 +42,6 @@ class FillInformationSceen extends Component {
 
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            //this.goBack(); // works best when the goBack is async
             BackHandler.exitApp()
         });
     }
@@ -59,7 +57,7 @@ class FillInformationSceen extends Component {
                     <TextInput
                         style={styles.input}
                         underlineColorAndroid="transparent"
-                        placeholder="Username"
+                        placeholder={string.userName}
                         placeholderTextColor="black"
                         autoCapitalize="none"
                         value={this.state.userName}
@@ -68,7 +66,7 @@ class FillInformationSceen extends Component {
                     <TextInput
                         style={styles.input}
                         underlineColorAndroid="transparent"
-                        placeholder="Current District"
+                        placeholder={string.currentDistrict}
                         placeholderTextColor="black"
                         autoCapitalize="none"
                         value={this.state.currentDistrict}
@@ -77,14 +75,14 @@ class FillInformationSceen extends Component {
                     <TextInput
                         style={styles.input}
                         underlineColorAndroid="transparent"
-                        placeholder="Current Town"
+                        placeholder={string.currentTown}
                         placeholderTextColor="black"
                         autoCapitalize="none"
                         value={this.state.currentTown}
                         onChangeText={(currentTown) => this.setState({ currentTown })}
                     />
                     <Dropdown
-                        label='Home District'
+                        label={string.homeDistrict}
                         data={this.state.dataDistrict}
                         onChangeText={(homeDistrict) => {
                             this.setState({
@@ -96,7 +94,7 @@ class FillInformationSceen extends Component {
                     <TextInput
                         style={styles.input}
                         underlineColorAndroid="transparent"
-                        placeholder="Home Town"
+                        placeholder={string.homeTown}
                         placeholderTextColor="black"
                         autoCapitalize="none"
                         value={this.state.homeTown}

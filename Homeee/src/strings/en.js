@@ -1,0 +1,21 @@
+export const string = {
+    login: 'Login',
+    register: 'Register',
+    userName: 'Username',
+    email: 'Email',
+    password: 'Password',
+    findHomemate: 'Find Home-mate',
+    diary: 'Diary',
+    find: 'Find',
+    plan: 'Plan',
+    diaryPlaceholder: 'Dear diary, ...',
+    createNewDiary: 'Add',
+    hope: 'Hope',
+    you: 'You',
+    happy: 'Happy',
+    currentDistrict: 'Current district',
+    currentTown: 'Current town',
+    homeDistrict: 'Home district',
+    homeTown: 'Homw town',
+    goodMorning: 'Good morning,'
+}

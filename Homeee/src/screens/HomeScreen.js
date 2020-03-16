@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { BackHandler, Alert } from "react-native";
 
 import { NavigationContainer, } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
@@ -9,6 +8,8 @@ import HopeScreen from './HopeScreen';
 import YouScreen from './YouScreen';
 import HappyScreen from './HappyScreen';
 
+import { string } from '../strings/en';
+
 const Tab = createMaterialBottomTabNavigator();
 
 export default class HomeScreen extends Component {
@@ -16,24 +17,23 @@ export default class HomeScreen extends Component {
         return (
             <NavigationContainer independent={true}>
                 <Tab.Navigator
-                    initialRouteName='Hope'
                     inactiveColor='black'
                     activeColor='red'
                     barStyle={{ backgroundColor: 'white' }}
                     backBehavior="initialRoute"
                 >
                     <Tab.Screen
-                        name="Hope"
+                        name={string.hope}
                         component={HopeScreen}
                         options={{ tabBarLabel: 'Hope', tabBarIcon: ({ color }) => (<Icon name='tags' color={color} size={15} />) }}
                     />
                     <Tab.Screen
-                        name="You"
+                        name={string.you}
                         component={YouScreen}
                         options={{ tabBarLabel: 'You', tabBarIcon: ({ color }) => (<Icon name='tags' color={color} size={15} />) }}
                     />
                     <Tab.Screen
-                        name="Happy"
+                        name={string.happy}
                         component={HappyScreen}
                         options={{ tabBarLabel: 'Happy', tabBarIcon: ({ color }) => (<Icon name='tags' color={color} size={15} />) }}
                     />

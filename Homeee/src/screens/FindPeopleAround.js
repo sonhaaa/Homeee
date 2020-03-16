@@ -4,9 +4,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
-import database, { firebase } from "@react-native-firebase/database";
+import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
-// import { red100 } from 'react-native-paper/lib/typescript/src/styles/colors';
+
+import { string } from '../strings/en';
 
 class FindPeopleAround extends Component {
     constructor(props) {
@@ -30,24 +31,24 @@ class FindPeopleAround extends Component {
     }
 
     filterUsers(param) {
-        var ref = firebase.database().ref("Users");
+        var ref = database().ref("Users");
         ref.orderByChild(param)
             .equalTo(this.state.currentDistrict)
             .on("child_added", snapshot => this.setState({ Uids: this.state.Uids.add(snapshot.key) }));
     }
 
     componentDidMount() {
-        firebase.database().ref('/Users/')
+        database().ref('/Users/')
             .once('value')
             .then(snapshot => {
                 this.setState({ allUsersData: snapshot.val() })
             });
-        const userId = firebase.auth().currentUser.uid;
+        const userId = auth().currentUser.uid;
     }
 
     getUserPlacesInfo() {
-        const userId = firebase.auth().currentUser.uid;
-        firebase.database().ref('/Users/' + userId)
+        const userId = auth().currentUser.uid;
+        database().ref('/Users/' + userId)
             .once('value')
             .then(snapshot => {
                 const snapShotVal = snapshot.val();
@@ -120,7 +121,7 @@ class FindPeopleAround extends Component {
                 <Text> latitude: {latitude} </Text>
                 <Text> longitude: {longitude} </Text>
                 <TouchableOpacity style={styles.findButton} onPress={this.findUsersAround}>
-                    <Text style={styles.findText}> FIND </Text>
+                    <Text style={styles.findText}> {string.findHomemate} </Text>
                 </TouchableOpacity>
                 <View style={{ backgroundColor: 'green', height: 70, width: 300 }}>
                     {Array.from(this.state.usersAround).map(item => (<Text style={{ color: 'white' }}> {item} </Text>))}
