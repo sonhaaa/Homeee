@@ -17,5 +17,6 @@ export const string = {
     currentTown: 'Current town',
     homeDistrict: 'Home district',
     homeTown: 'Homw town',
-    goodMorning: 'Good morning,'
+    goodMorning: 'Good morning,',
+    addMyInfomation: 'Add my information'
 }

@@ -16,6 +16,9 @@ import PushNotificationConfig from '../utils/PushNotificationConfig';
 import { color } from '../assets/color/color';
 import { string } from '../strings/en';
 
+import { Root, Popup } from 'popup-ui'
+// import RNShineButton from 'react-native-shine-button'
+
 class LoginRegisterScreen extends Component {
     constructor(props) {
         super(props);
@@ -173,58 +176,83 @@ class LoginRegisterScreen extends Component {
     render() {
         const { registerColor, loginColor, isLogin, isDarkMode } = this.state;
         return (
-            <View style={[styles.container,
-            { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
-                <Text>{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
-                <Switch
-                    style={{ marginTop: 30 }}
-                    onValueChange={this.changeMode}
-                    value={isDarkMode}
-                />
-                <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
-                    <TouchableOpacity onPress={this.handleChangeToLogin}>
-                        <Text style={{ color: loginColor }}>{string.login}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingLeft: 15 }} onPress={this.handleChangeToRegister}>
-                        <Text style={{ color: registerColor }}>{string.register}</Text>
-                    </TouchableOpacity>
-                </View>
-                <TextInput
-                    style={styles.input}
-                    underlineColorAndroid="transparent"
-                    placeholder={string.email}
-                    placeholderTextColor="black"
-                    autoCapitalize="none"
-                    value={this.state.email}
-                    onChangeText={this.handleEmail}
-                />
-                <TextInput
-                    style={styles.input}
-                    underlineColorAndroid="transparent"
-                    placeholder={string.password}
-                    placeholderTextColor="black"
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                    value={this.state.password}
-                    onChangeText={this.handlePassword}
-                />
-                <Text> {this.state.processing} </Text>
-                {isLogin ? (
-                    <TouchableOpacity
-                        style={styles.submitButton}
-                        onPress={() => this.logIn(this.state.email, this.state.password)}
-                    >
-                        <Text style={styles.submitButtonText}> {string.login} </Text>
-                    </TouchableOpacity>
-                ) : (
+            <Root>
+                <View style={[styles.container,
+                { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
+                    <Text>{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
+                    <Switch
+                        style={{ marginTop: 30 }}
+                        onValueChange={this.changeMode}
+                        value={isDarkMode}
+                    />
+                    <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
+                        <TouchableOpacity onPress={this.handleChangeToLogin}>
+                            <Text style={{ color: loginColor }}>{string.login}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ paddingLeft: 15 }} onPress={this.handleChangeToRegister}>
+                            <Text style={{ color: registerColor }}>{string.register}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <TextInput
+                        style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder={string.email}
+                        placeholderTextColor="black"
+                        autoCapitalize="none"
+                        value={this.state.email}
+                        onChangeText={this.handleEmail}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder={string.password}
+                        placeholderTextColor="black"
+                        autoCapitalize="none"
+                        secureTextEntry={true}
+                        value={this.state.password}
+                        onChangeText={this.handlePassword}
+                    />
+
+                    <View>
+                        <TouchableOpacity
+                            onPress={() =>
+                                Popup.show({
+                                    type: 'Danger',
+                                    title: 'Upload complete',
+                                    button: false,
+                                    textBody: 'Congrats! Your upload successfully done',
+                                    buttontext: 'Ok',
+                                    callback: () => Popup.hide()
+                                })
+                            }
+                        >
+                            <Text>Open Popup</Text>
+                        </TouchableOpacity>
+                    </View>
+
+
+                    {/* <RNShineButton
+                    shape={'heart'}
+                    color={'#808080'}
+                    fillColor={'#ff0000'}
+                    size={100}
+                /> */}
+                    {isLogin ? (
                         <TouchableOpacity
                             style={styles.submitButton}
-                            onPress={() => { this.signUp(this.state.email, this.state.password) }}
+                            onPress={() => this.logIn(this.state.email, this.state.password)}
                         >
-                            <Text style={styles.submitButtonText}> {string.register} </Text>
+                            <Text style={styles.submitButtonText}> {string.login} </Text>
                         </TouchableOpacity>
-                    )}
-            </View>
+                    ) : (
+                            <TouchableOpacity
+                                style={styles.submitButton}
+                                onPress={() => { this.signUp(this.state.email, this.state.password) }}
+                            >
+                                <Text style={styles.submitButtonText}> {string.register} </Text>
+                            </TouchableOpacity>
+                        )}
+                </View></Root>
         )
     }
 };

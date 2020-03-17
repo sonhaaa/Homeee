@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from 'react-native';
 
 import { Dropdown } from 'react-native-material-dropdown';
-import { District } from '../strings/data';
+import { districtsData } from '../strings/data';
 
 import database from '@react-native-firebase/database';
 import auth from '@react-native-firebase/auth';
@@ -12,11 +12,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from './HomeScreen';
 import { string } from '../strings/en';
 
+import Btn from 'react-native-micro-animated-button';
+
 class FillInformationSceen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataDistrict: District,
+            dataDistrict: districtsData,
             value: '',
             homeDistrict: '',
             userName: '',
@@ -24,10 +26,10 @@ class FillInformationSceen extends Component {
             currentDistrict: '',
             currentTown: ''
         }
-
     }
 
     handleSubmit() {
+
         const uid = auth().currentUser.uid;
         const ref = database().ref(`Users/${uid}`);
         ref.update({
@@ -36,9 +38,12 @@ class FillInformationSceen extends Component {
             homeTown: this.state.homeTown,
             currentDistrict: this.state.currentDistrict,
             currentTown: this.state.currentTown,
-        });
-        this.props.navigation.navigate('HomeScreen')
-    }
+        })
+            .then(
+                this.btn.success(),
+                this.props.navigation.navigate('HomeScreen')
+            ).catch(err => { this.btn.error(), alert('Ko them duoc, thu lai sau' + err) });
+    };
 
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -100,9 +105,12 @@ class FillInformationSceen extends Component {
                         value={this.state.homeTown}
                         onChangeText={(homeTown) => this.setState({ homeTown })}
                     />
-                    <TouchableOpacity style={styles.submit} onPress={() => this.handleSubmit()}>
-                        <Text> submit</Text>
-                    </TouchableOpacity>
+                    <Btn
+                        label={string.addMyInfomation}
+                        onPress={() => this.handleSubmit()}
+                        ref={ref => (this.btn = ref)}
+                        successIcon="check"
+                    />
                 </View>
             </View>
         );

@@ -5,6 +5,8 @@ import { TextInput, ScrollView } from 'react-native-gesture-handler';
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
 
+import Btn from 'react-native-micro-animated-button';
+
 class DiaryScreen extends Component {
     constructor(props) {
         super(props);
@@ -43,7 +45,11 @@ class DiaryScreen extends Component {
     }
 
     createNewDiary = () => {
-        this.state.inputNewDiary === "" ? alert('Dien day du pls') : this.pushNewDiary()
+        this.state.inputNewDiary === "" ? alert('Dien day du pls') : (
+            this.btn.success(),
+            this.pushNewDiary(),
+            this.btn.reset()
+        )
     };
 
     render() {
@@ -59,10 +65,11 @@ class DiaryScreen extends Component {
                         value={inputNewDiary}
                         onChangeText={newDiary => this.setState({ inputNewDiary: newDiary })}
                     />
-                    <Button
-                        title='add'
-                        style={styles.addNewDiary}
+                    <Btn
+                        label="add"
                         onPress={this.createNewDiary}
+                        ref={ref => (this.btn = ref)}
+                        successIcon="check"
                     />
                 </View>
 
