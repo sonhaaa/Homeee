@@ -18,5 +18,6 @@ export const string = {
     homeDistrict: 'Home district',
     homeTown: 'Homw town',
     goodMorning: 'Good morning,',
-    addMyInfomation: 'Add my information'
+    addMyInfomation: 'Add my information',
+    fullFill: 'Let fill full information'
 }

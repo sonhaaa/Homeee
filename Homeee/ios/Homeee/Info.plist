@@ -71,6 +71,11 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>sofia_bold.ttf</string>
+		<string>sofia_light.otf</string>
+		<string>PlayfairDisplay.ttf</string>
+		<string>Sofiabold.ttf</string>
+		<string>sofialight.otf</string>
 	</array>
 </dict>
 </plist>

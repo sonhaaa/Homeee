@@ -124,7 +124,14 @@ class FindPeopleAround extends Component {
                     <Text style={styles.findText}> {string.findHomemate} </Text>
                 </TouchableOpacity>
                 <View style={{ backgroundColor: 'green', height: 70, width: 300 }}>
-                    {Array.from(this.state.usersAround).map(item => (<Text style={{ color: 'white' }}> {item} </Text>))}
+                    {Array.from(this.state.usersAround).length > 0 ? Array.from(this.state.usersAround)
+                        .map(item => {
+                            (
+                                <Text style={{ color: 'white' }}> {item} </Text>
+                            )
+                        }) : (
+                            <Text>No user found</Text>
+                        )}
                 </View>
             </View >
         );

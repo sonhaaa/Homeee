@@ -16,8 +16,9 @@ import PushNotificationConfig from '../utils/PushNotificationConfig';
 import { color } from '../assets/color/color';
 import { string } from '../strings/en';
 
-import { Root, Popup } from 'popup-ui'
-// import RNShineButton from 'react-native-shine-button'
+import { Root, Popup } from 'popup-ui';
+import Reinput from 'reinput';
+import Btn from 'react-native-micro-animated-button';
 
 class LoginRegisterScreen extends Component {
     constructor(props) {
@@ -26,8 +27,6 @@ class LoginRegisterScreen extends Component {
             email: '',
             password: '',
             userData: {},
-            processing: '',
-            visible: false,
             isLogin: true,
             registerColor: 'red',
             loginColor: 'green',
@@ -111,8 +110,15 @@ class LoginRegisterScreen extends Component {
                 });
         }
         else {
-            alert('Pls dien day du')
-            //this.handleShowToast()
+            Popup.show({
+                type: 'Warning',
+                title: 'Hey!!!',
+                button: false,
+                textBody: 'Let fill full information',
+                buttontext: 'Ok',
+                callback: () => Popup.hide()
+            }),
+                this.btn.reset()
         }
     }
 
@@ -120,34 +126,26 @@ class LoginRegisterScreen extends Component {
         if (this.state.password && this.state.email !== "") {
             auth().createUserWithEmailAndPassword(email, password)
                 .then((res) => {
+                    this.btn.success()
                     this.storeEmail(JSON.stringify(res.user.email)),
                         this.storePassword(this.state.password),
                         this.writeData(email, password),
                         this.props.navigation.navigate('FillInformationScreen')
                 })
-                .catch(function (err) {
-                    // Handle Errors here.
-                    Alert.alert(
-                        'Khong the dang ki',
-                        'My Alert Msg',
-                        [
-                            {
-                                text: 'Cancel',
-                                // onPress: () => this.setState({ processing: 'Check lai ...' }),
-                                onPress: () => console.log('Ask me later pressed'),
-                                style: 'cancel',
-                            },
-                            { text: 'OK', onPress: () => console.log('OK Pressed') },
-                        ],
-                        { cancelable: false },
-                    );
-                    console.log(err);
-
+                .catch(err => {
+                    this.btn.error(), alert('Ko them duoc, thu lai sau' + err), this.btn.reset()
                 })
         }
         else {
-            alert('ple check lai nhe')
-
+            Popup.show({
+                type: 'Warning',
+                title: 'Hey!!!',
+                button: false,
+                textBody: 'Let fill full information',
+                buttontext: 'Ok',
+                callback: () => Popup.hide()
+            }),
+                this.btn.reset()
         }
     }
 
@@ -179,7 +177,7 @@ class LoginRegisterScreen extends Component {
             <Root>
                 <View style={[styles.container,
                 { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
-                    <Text>{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
+                    <Text style={{ fontFamily: 'sofia_light.otf' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
                     <Switch
                         style={{ marginTop: 30 }}
                         onValueChange={this.changeMode}
@@ -187,72 +185,45 @@ class LoginRegisterScreen extends Component {
                     />
                     <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
                         <TouchableOpacity onPress={this.handleChangeToLogin}>
-                            <Text style={{ color: loginColor }}>{string.login}</Text>
+                            <Text style={{ color: loginColor, fontFamily: 'sofialight.otf' }}>{string.login}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ paddingLeft: 15 }} onPress={this.handleChangeToRegister}>
                             <Text style={{ color: registerColor }}>{string.register}</Text>
                         </TouchableOpacity>
                     </View>
-                    <TextInput
+                    <Reinput
                         style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder={string.email}
-                        placeholderTextColor="black"
-                        autoCapitalize="none"
+                        label={string.email}
                         value={this.state.email}
                         onChangeText={this.handleEmail}
                     />
-                    <TextInput
+                    <Reinput
                         style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder={string.password}
+                        label={string.password}
                         placeholderTextColor="black"
                         autoCapitalize="none"
                         secureTextEntry={true}
                         value={this.state.password}
                         onChangeText={this.handlePassword}
                     />
-
-                    <View>
-                        <TouchableOpacity
-                            onPress={() =>
-                                Popup.show({
-                                    type: 'Danger',
-                                    title: 'Upload complete',
-                                    button: false,
-                                    textBody: 'Congrats! Your upload successfully done',
-                                    buttontext: 'Ok',
-                                    callback: () => Popup.hide()
-                                })
-                            }
-                        >
-                            <Text>Open Popup</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
-                    {/* <RNShineButton
-                    shape={'heart'}
-                    color={'#808080'}
-                    fillColor={'#ff0000'}
-                    size={100}
-                /> */}
                     {isLogin ? (
-                        <TouchableOpacity
+                        <Btn
                             style={styles.submitButton}
+                            label={string.login}
                             onPress={() => this.logIn(this.state.email, this.state.password)}
-                        >
-                            <Text style={styles.submitButtonText}> {string.login} </Text>
-                        </TouchableOpacity>
+                            ref={ref => (this.btn = ref)}
+                            successIcon="check"
+                        />
                     ) : (
-                            <TouchableOpacity
-                                style={styles.submitButton}
-                                onPress={() => { this.signUp(this.state.email, this.state.password) }}
-                            >
-                                <Text style={styles.submitButtonText}> {string.register} </Text>
-                            </TouchableOpacity>
+                            <Btn
+                                label={string.register}
+                                onPress={() => this.signUp(this.state.email, this.state.password)}
+                                ref={ref => (this.btn = ref)}
+                                successIcon="heart"
+                            />
                         )}
-                </View></Root>
+                </View>
+            </Root>
         )
     }
 };
@@ -261,25 +232,20 @@ const styles = StyleSheet.create({
     container: {
         flex: 2,
         justifyContent: "center",
-        // alignItems: "center",
         backgroundColor: "#F5FCFF"
     },
     input: {
-        // margin: 15,
+        fontFamily: 'sofialight.otf',
         height: 40,
-        borderColor: "black",
-        borderWidth: 1
+        width: 250
     },
     submitButton: {
-        backgroundColor: "black",
+        backgroundColor: "yellow",
         padding: 10,
-        // margin: 15,
+        fontFamily: 'PlayfairDisplay.ttf',
         alignItems: "center",
-        height: 40
+        height: 40,
     },
-    submitButtonText: {
-        color: "white"
-    }
 });
 
 const Stack = createStackNavigator();
