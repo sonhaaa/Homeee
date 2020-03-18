@@ -60,7 +60,7 @@ class Hope extends Component {
                     </ScrollView>
                 </RBSheet>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('DiaryScreen')} style={styles.find}>
-                    <Text style={{ color: 'white' }} > {string.diary} </Text>
+                    <Text style={{ color: 'white', fontFamily: 'PlayfairDisplay.ttf' }} > {string.diary} </Text>
                 </TouchableOpacity>
             </View >
         );
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
         width: 150,
         backgroundColor: 'pink',
         justifyContent: "center",
-        alignItems: 'center'
+        alignItems: 'center',
+
     }
 });
 

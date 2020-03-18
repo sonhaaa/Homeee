@@ -177,7 +177,7 @@ class LoginRegisterScreen extends Component {
             <Root>
                 <View style={[styles.container,
                 { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
-                    <Text style={{ fontFamily: 'sofia_light.otf' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
+                    <Text style={{ fontFamily: 'PlayfairDisplay.ttf' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
                     <Switch
                         style={{ marginTop: 30 }}
                         onValueChange={this.changeMode}
