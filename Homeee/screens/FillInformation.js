@@ -131,7 +131,8 @@ const styles = StyleSheet.create({
         margin: 15,
         height: 40,
         borderColor: "black",
-        borderWidth: 1
+        borderWidth: 1,
+        fontFamily: 'sofialight'
     },
     submit: {
         height: 30,

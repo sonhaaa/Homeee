@@ -19,7 +19,7 @@ export default class HomeScreen extends Component {
                 <Tab.Navigator
                     inactiveColor='black'
                     activeColor='red'
-                    barStyle={{ backgroundColor: 'white' }}
+                    barStyle={{ backgroundColor: 'white', fontFamily: 'Sofiabold' }}
                     backBehavior="initialRoute"
                 >
                     <Tab.Screen

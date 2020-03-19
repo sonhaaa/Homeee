@@ -16,7 +16,7 @@ export const string = {
     currentDistrict: 'Current district',
     currentTown: 'Current town',
     homeDistrict: 'Home district',
-    homeTown: 'Homw town',
+    homeTown: 'Home town',
     goodMorning: 'Good morning,',
     addMyInfomation: 'Add my information',
     fullFill: 'Let fill full information',

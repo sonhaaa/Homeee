@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, Switch } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import auth from '@react-native-firebase/auth';
@@ -182,7 +182,7 @@ class LoginRegisterScreen extends Component {
             <Root>
                 <View style={[styles.container,
                 { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
-                    <Text style={{ fontFamily: 'PlayfairDisplay.ttf' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
+                    <Text style={{ fontFamily: 'sofialight' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
                     <Switch
                         style={{ marginTop: 30 }}
                         onValueChange={this.changeMode}
@@ -190,10 +190,13 @@ class LoginRegisterScreen extends Component {
                     />
                     <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
                         <TouchableOpacity onPress={this.handleChangeToLogin}>
-                            <Text style={{ color: loginColor, fontFamily: 'sofialight.otf' }}>{string.login}</Text>
+                            <Text style={[styles.loginText, { color: loginColor }]}>{string.login}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ paddingLeft: 15 }} onPress={this.handleChangeToRegister}>
-                            <Text style={{ color: registerColor }}>{string.register}</Text>
+                        <TouchableOpacity
+                            style={{ paddingLeft: 15 }}
+                            onPress={this.handleChangeToRegister}
+                        >
+                            <Text style={[styles.registerText, { color: registerColor }]}>{string.register}</Text>
                         </TouchableOpacity>
                     </View>
                     <Reinput
@@ -240,17 +243,27 @@ const styles = StyleSheet.create({
         backgroundColor: "#F5FCFF"
     },
     input: {
-        fontFamily: 'sofialight.otf',
+        fontFamily: 'Sofiabold',
         height: 40,
         width: 250
     },
     submitButton: {
         backgroundColor: "yellow",
         padding: 10,
-        fontFamily: 'PlayfairDisplay.ttf',
+        fontFamily: 'Sofiabold',
         alignItems: "center",
         height: 40,
     },
+    loginText: {
+        color: 'red',
+        fontFamily: 'Sofiabold',
+        fontSize: 17
+    },
+    registerText: {
+        color: 'red',
+        fontFamily: 'Sofiabold',
+        fontSize: 17
+    }
 });
 
 const Stack = createStackNavigator();

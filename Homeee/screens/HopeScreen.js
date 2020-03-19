@@ -68,10 +68,10 @@ class Hope extends Component {
                     </ScrollView>
                 </RBSheet>
                 <TouchableOpacity onPress={this.moveToDiaryScreen} style={styles.find}>
-                    <Text style={{ color: 'white', fontFamily: 'PlayfairDisplay.ttf' }} > {string.diary} </Text>
+                    <Text style={styles.buttonText} > {string.diary} </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.moveToPlanScreen} style={styles.find}>
-                    <Text style={{ color: 'white', fontFamily: 'PlayfairDisplay.ttf' }} > {string.plan} </Text>
+                    <Text style={styles.buttonText} > {string.plan} </Text>
                 </TouchableOpacity>
             </View >
         );
@@ -85,13 +85,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: "center",
     },
+    headerText: {
+        fontSize: 14,
+        fontFamily: 'sofialight'
+    },
+    username: {
+        fontSize: 16,
+        fontFamily: 'Sofiabold'
+    },
     find: {
         height: 25,
         width: 150,
         backgroundColor: 'pink',
         justifyContent: "center",
         alignItems: 'center',
-
+    },
+    buttonText: {
+        color: 'white',
+        fontFamily: 'sofialight'
     }
 });
 
