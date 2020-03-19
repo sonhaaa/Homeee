@@ -1,32 +1,81 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
-// import Moment from 'moment';
+import { string } from '../strings/en';
 
-// Moment.locales('en', {
-//     months: 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
-//     monthsShort: 'janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.'.split('_'),
-//     monthsParseExact: true,
-//     weekdays: 'dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi'.split('_'),
-//     weekdaysShort: 'dim._lun._mar._mer._jeu._ven._sam.'.split('_'),
-//     weekdaysMin: 'Di_Lu_Ma_Me_Je_Ve_Sa'.split('_'),
-//     weekdaysParseExact: true,
-// });
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
-class NewPlan extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
+export default function NewPlan({ type, username }) {
+    const [value, setValue] = useState('');
+    const addPlan = (title, action) => {
+        const uid = auth().currentUser.uid;
+        database().ref('Users/' + uid + '/Plans').push({
+            title: title,
+            action: action,
+            isDone: false
+        })
+        setValue({ value: '' })
     }
-
-    render() {
-        return (
-            <View>
-                <Text>Henlo</Text>
+    return (
+        <View style={styles.container}>
+            <Text style={styles.header}>{string.createNewPlan}</Text>
+            <View style={styles.title}>
+                <TextInput
+                    placeholder={string.addAction}
+                    style={styles.addAction}
+                    onChangeText={(value) => setValue(value)}
+                    value={value}
+                />
+                {type === 'people' ? (
+                    <View style={{ flexDirection: 'row' }}>
+                        <Text style={styles.with}>{string.with} </Text>
+                        <Text style={styles.username}>{username}</Text>
+                    </View>
+                ) : (
+                        null
+                    )}
             </View>
-        );
-    }
+            <TouchableOpacity onPress={() => addPlan('with sonha', value)}>
+                <Text>
+                    Add
+                </Text>
+            </TouchableOpacity>
+        </View>
+    )
 }
 
-export default NewPlan;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20
+    },
+    header: {
+        fontFamily: 'sofialight',
+        fontSize: 23,
+        margin: 25
+    },
+    addAction: {
+        width: 100,
+        height: 35,
+        padding: 10,
+        borderColor: 'gray',
+        borderWidth: 0.5,
+        fontFamily: 'sofialight',
+        borderRadius: 18
+    },
+    title: {
+        flexDirection: 'row',
+        marginLeft: 25
+    },
+    with: {
+        fontFamily: 'sofialight'
+    },
+    username: {
+        fontFamily: 'Sofiabold',
+        fontSize: 15
+    }
+});
+

@@ -43,11 +43,11 @@ class Hope extends Component {
         return (
             <View style={styles.container}>
                 <View>
-                    <Text>{string.goodMorning}</Text>
-                    <Text> {username} </Text>
+                    <Text style={styles.headerText}>{string.goodMorning}</Text>
+                    <Text style={styles.username}>{username}!</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
-                    <Text>{string.findHomemate}</Text>
+                    <Text style={styles.buttonText}>{string.findHomemate}</Text>
                 </TouchableOpacity>
                 <RBSheet
                     ref={ref => {
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         fontFamily: 'sofialight'
     },
     username: {
-        fontSize: 16,
+        fontSize: 18,
         fontFamily: 'Sofiabold'
     },
     find: {

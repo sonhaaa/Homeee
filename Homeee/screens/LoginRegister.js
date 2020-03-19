@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#F5FCFF"
     },
     input: {
-        fontFamily: 'Sofiabold',
+        fontFamily: 'sofialight',
         height: 40,
         width: 250
     },

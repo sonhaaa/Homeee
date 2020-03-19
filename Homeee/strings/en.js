@@ -20,5 +20,7 @@ export const string = {
     goodMorning: 'Good morning,',
     addMyInfomation: 'Add my information',
     fullFill: 'Let fill full information',
-    createNewPlan: 'New plan'
+    createNewPlan: 'New plan',
+    addAction: 'Action',
+    with: 'with'
 }

@@ -1,44 +1,50 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
 
 import { string } from '../strings/en';
-import RBSheet from "react-native-raw-bottom-sheet";
-
+import Modal from "react-native-modal";
 import NewPlan from '../components/NewPlan';
 
 class PlanScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            isModalVisible: false
         };
     }
+
+    toggleModal = () => {
+        this.setState({ isModalVisible: !this.state.isModalVisible });
+    };
 
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.header}>{string.plan}</Text>
-                <TouchableOpacity onPress={() => this.Input.open()} style={styles.button}>
-                    <Text style={styles.buttonTitle}>TEXT INPUT</Text>
-                </TouchableOpacity>
-                <RBSheet
-                    ref={ref => {
-                        this.Input = ref;
-                    }}
-                    height={60}
-                    animationType="none"
-                    duration={200}
-                    customStyles={{
-                        wrapper: { backgroundColor: "#fff" }
-                    }}
+                <Button title="Show modal" onPress={this.toggleModal} />
+                <Modal
+                    testID={'modal'}
+                    isVisible={this.state.isModalVisible}
+                    backdropColor="#B4B3DB"
+                    backdropOpacity={0.8}
+                    animationIn="zoomInDown"
+                    animationOut="zoomOutUp"
+                    animationInTiming={600}
+                    animationOutTiming={600}
+                    backdropTransitionInTiming={600}
+                    backdropTransitionOutTiming={600}
+                    style={{ alignItems: 'center', justifyContent: "center" }}
                 >
-                    <View style={styles.inputContainer}>
-                        {/* <MDIcon name="photo-camera" style={styles.inputIcon} />
-                        <MDIcon name="tag-faces" style={styles.inputIcon} /> */}
-                        <TextInput style={styles.input} autoFocus placeholder="Write a comment..." />
-
+                    <View style={{ width: 250, height: 200 }}>
+                        <NewPlan
+                            //type='people'
+                            username='sonha'
+                        />
+                        <TouchableOpacity onPress={this.toggleModal} style={styles.buttonClose}>
+                            <Text> HIDE </Text>
+                        </TouchableOpacity>
                     </View>
-                </RBSheet>
+                </Modal>
             </View>
         );
     }
@@ -50,7 +56,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     header: {
-        fontFamily: 'Sofiabold.ttf',
+        fontFamily: 'Sofiabold',
         fontSize: 30,
         margin: 20
     },
@@ -77,6 +83,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#f1f1f1",
         marginHorizontal: 10
     },
+    buttonClose: {
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20,
+        backgroundColor: 'white',
+        alignItems: "center",
+        alignContent: 'center'
+    }
 });
 
 export default PlanScreen;

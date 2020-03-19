@@ -1,0 +1,106 @@
+diff --git a/node_modules/react-native-micro-animated-button/button.js b/node_modules/react-native-micro-animated-button/button.js
+index d585df1..eadbcd3 100644
+--- a/node_modules/react-native-micro-animated-button/button.js
++++ b/node_modules/react-native-micro-animated-button/button.js
+@@ -18,19 +18,19 @@ import PropTypes from 'prop-types';
+ const colors =
+   Platform.OS === 'ios'
+     ? {
+-        blue: '#007aff',
+-        gray: '#d8d8d8',
+-        green: '#4cd964',
+-        red: '#ff3b30',
+-        white: '#ffffff'
+-      }
++      blue: '#007aff',
++      gray: '#d8d8d8',
++      green: '#4cd964',
++      red: '#ff3b30',
++      white: '#ffffff'
++    }
+     : {
+-        blue: '#4285f4',
+-        gray: '#d8d8d8',
+-        green: '#0f9d58',
+-        red: '#db4437',
+-        white: '#ffffff'
+-      };
++      blue: '#4285f4',
++      gray: '#d8d8d8',
++      green: '#0f9d58',
++      red: '#db4437',
++      white: '#ffffff'
++    };
+ 
+ export default class MicroAnimatedButton extends Component {
+   static propTypes = {
+@@ -164,15 +164,15 @@ export default class MicroAnimatedButton extends Component {
+   // animations
+ 
+   width = this.props.width ||
+-  this.animated.interpolate({
+-    inputRange: [0, 1, 2, 3],
+-    outputRange: [
+-      this.props.maxWidth,
+-      this.props.maxWidth,
+-      this.props.minWidth,
+-      this.props.expandOnFinish ? this.props.maxWidth : this.props.minWidth
+-    ]
+-  });
++    this.animated.interpolate({
++      inputRange: [0, 1, 2, 3],
++      outputRange: [
++        this.props.maxWidth,
++        this.props.maxWidth,
++        this.props.minWidth,
++        this.props.expandOnFinish ? this.props.maxWidth : this.props.minWidth
++      ]
++    });
+ 
+   // animation colors
+ 
+@@ -222,11 +222,11 @@ export default class MicroAnimatedButton extends Component {
+       foregroundColor || defaultForegroundColor,
+       noFill
+         ? (success ? successForegroundColor : errorForegroundColor) ||
+-          foregroundColor ||
+-          defaultForegroundColor
++        foregroundColor ||
++        defaultForegroundColor
+         : (success ? successForegroundColor : errorForegroundColor) ||
+-          backgroundColor ||
+-          defaultBackgroundColor
++        backgroundColor ||
++        defaultBackgroundColor
+     ];
+   };
+ 
+@@ -424,15 +424,15 @@ export default class MicroAnimatedButton extends Component {
+         {step === 3 &&
+           (error
+             ? // if error: render errorLabel > renderErrorIcon() (custom) > errorIcon
+-              errorLabel
++            errorLabel
+               ? this.renderLabel(errorLabel, labelStyle)
+               : renderErrorIcon ||
+-                this.renderIcon(errorIcon, errorForegroundColor)
++              this.renderIcon(errorIcon, errorForegroundColor)
+             : // if success: render successLabel > renderSuccessIcon() (custom) > successIcon
+-              successLabel
++            successLabel
+               ? this.renderLabel(successLabel, labelStyle)
+               : renderSuccessIcon ||
+-                this.renderIcon(successIcon, successForegroundColor))}
++              this.renderIcon(successIcon, successForegroundColor))}
+       </Animated.View>
+     );
+ 
+@@ -470,6 +470,7 @@ const styles = {
+   },
+   label: {
+     backgroundColor: 'transparent',
+-    padding: 10
++    padding: 10,
++    fontFamily: 'Sofiabold'
+   }
+ };
