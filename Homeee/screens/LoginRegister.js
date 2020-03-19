@@ -90,23 +90,20 @@ class LoginRegisterScreen extends Component {
     logIn(email, password) {
         if (this.state.email && this.state.password !== "") {
             auth().signInWithEmailAndPassword(email, password)
-                .then(() =>
-                    this.props.navigation.navigate('HomeScreen')
-                )
+                .then(() => {
+                    this.btn.success(),
+                        this.props.navigation.navigate('HomeScreen')
+                })
                 .catch(function () {
-                    Alert.alert(
-                        'Khong the Dang Nhap',
-                        'My Alert Msg',
-                        [
-                            {
-                                text: 'Cancel',
-                                onPress: () => console.log('cancel pressed'),
-                                style: 'cancel',
-                            },
-                            { text: 'OK', onPress: () => console.log('OK Pressed') },
-                        ],
-                        { cancelable: false },
-                    );
+                    Popup.show({
+                        type: 'Danger',
+                        title: 'Hey!!!',
+                        button: false,
+                        textBody: 'Cannot login! Please check again.',
+                        buttontext: 'Ok',
+                        callback: () => Popup.hide()
+                    }),
+                        this.btn.reset()
                 });
         }
         else {
@@ -133,7 +130,15 @@ class LoginRegisterScreen extends Component {
                         this.props.navigation.navigate('FillInformationScreen')
                 })
                 .catch(err => {
-                    this.btn.error(), alert('Ko them duoc, thu lai sau' + err), this.btn.reset()
+                    Popup.show({
+                        type: 'Danger',
+                        title: 'Hey!!!',
+                        button: false,
+                        textBody: 'Cannot signup! Please check your email, and password must be > 6 characters.',
+                        buttontext: 'Ok',
+                        callback: () => Popup.hide()
+                    }),
+                        this.btn.reset()
                 })
         }
         else {

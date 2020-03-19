@@ -19,5 +19,6 @@ export const string = {
     homeTown: 'Homw town',
     goodMorning: 'Good morning,',
     addMyInfomation: 'Add my information',
-    fullFill: 'Let fill full information'
+    fullFill: 'Let fill full information',
+    createNewPlan: 'New plan'
 }

@@ -7,12 +7,12 @@ import RBSheet from "react-native-raw-bottom-sheet";
 
 import FindPeopleAround from './FindPeopleAround';
 import DiaryScreen from './DiaryScreen';
+import PlanScreen from './PlanScreen';
 
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
 import { string } from '../strings/en';
-
 class Hope extends Component {
     constructor(props) {
         super(props);
@@ -28,6 +28,14 @@ class Hope extends Component {
 
     handleFindButton = () => {
         this.props.navigation.navigate('FindPeopleAroundScreen')
+    }
+
+    moveToDiaryScreen = () => {
+        this.props.navigation.navigate('DiaryScreen')
+    }
+
+    moveToPlanScreen = () => {
+        this.props.navigation.navigate('PlanScreen')
     }
 
     render() {
@@ -59,8 +67,11 @@ class Hope extends Component {
                         <FindPeopleAround />
                     </ScrollView>
                 </RBSheet>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('DiaryScreen')} style={styles.find}>
+                <TouchableOpacity onPress={this.moveToDiaryScreen} style={styles.find}>
                     <Text style={{ color: 'white', fontFamily: 'PlayfairDisplay.ttf' }} > {string.diary} </Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.moveToPlanScreen} style={styles.find}>
+                    <Text style={{ color: 'white', fontFamily: 'PlayfairDisplay.ttf' }} > {string.plan} </Text>
                 </TouchableOpacity>
             </View >
         );
@@ -92,6 +103,7 @@ function HopeScreen() {
             <Stack.Screen name='HopeScreen' component={Hope} />
             <Stack.Screen name='FindPeopleAroundScreen' component={FindPeopleAround} />
             <Stack.Screen name='DiaryScreen' component={DiaryScreen} />
+            <Stack.Screen name='PlanScreen' component={PlanScreen} />
         </Stack.Navigator>
     )
 }
