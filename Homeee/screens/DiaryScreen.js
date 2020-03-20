@@ -45,7 +45,7 @@ class DiaryScreen extends Component {
     }
 
     createNewDiary = () => {
-        this.state.inputNewDiary === "" ? alert('Dien day du pls') : (
+        this.state.inputNewDiary === "" ? (alert('Dien day du pls'), this.btn.reset()) : (
             this.btn.success(),
             this.pushNewDiary(),
             this.btn.reset()

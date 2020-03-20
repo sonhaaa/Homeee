@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
+
+import Pulse from 'react-native-pulse';
 
 import { string } from '../strings/en';
 
@@ -23,6 +25,8 @@ class FindPeopleAround extends Component {
             allUsersData: {},
             Uids: new Set(),
             usersAround: new Set(),
+            isShowPulse: false,
+            isShowFindButton: true
         };
     };
 
@@ -31,19 +35,18 @@ class FindPeopleAround extends Component {
     }
 
     filterUsers(param) {
+        const uid = auth().currentUser.uid;
         var ref = database().ref("Users");
         ref.orderByChild(param)
             .equalTo(this.state.currentDistrict)
-            .on("child_added", snapshot => this.setState({ Uids: this.state.Uids.add(snapshot.key) }));
+            .on("child_added", snapshot => { snapshot.key !== uid ? this.setState({ Uids: this.state.Uids.add(snapshot.key) }) : null });
     }
 
     componentDidMount() {
         database().ref('/Users/')
-            .once('value')
-            .then(snapshot => {
+            .on('value', snapshot => {
                 this.setState({ allUsersData: snapshot.val() })
-            });
-        const userId = auth().currentUser.uid;
+            })
     }
 
     getUserPlacesInfo() {
@@ -61,17 +64,21 @@ class FindPeopleAround extends Component {
             })
     };
 
+    renderUser = (uid) => {
+        const ref = database().ref('Users/' + uid)
+        ref.on('value', snapshot => { <Text> {snapshot.val().userName} </Text> })
+    }
+
     findUsersAround = () => {
         const currentUserId = auth().currentUser.uid;
+        this.setState({ isShowPulse: !this.state.isShowPulse })
         this.getUserPlacesInfo();
         this.state.Uids.forEach(userId => {
             if (userId !== currentUserId) {
                 if (this.state.allUsersData[userId].homeTown === this.state.homeTown) {
                     this.state.usersAround.add(this.getUsername(userId))
-                    console.log('add succed');
-                    console.log(this.state.usersAround);
                 } else if (this.state.allUsersData[userId].homeDistrict === this.state.homeDistrict) {
-                    console.log("HomeDistrict: " + this.getUsername(userId))
+                    this.state.usersAround.add(this.getUsername(userId))
                 }
             }
         })
@@ -118,20 +125,22 @@ class FindPeopleAround extends Component {
                         />
                     </MapView>
                 </View> */}
-                <Text> latitude: {latitude} </Text>
-                <Text> longitude: {longitude} </Text>
+                {this.state.isShowPulse ? (
+                    <Pulse color='red' numPulses={3} diameter={400} speed={10} duration={1000} />
+                ) : (null)}
                 <TouchableOpacity style={styles.findButton} onPress={this.findUsersAround}>
                     <Text style={styles.findText}> {string.findHomemate} </Text>
                 </TouchableOpacity>
-                <View style={{ backgroundColor: 'green', height: 70, width: 300 }}>
-                    {Array.from(this.state.usersAround).length > 0 ? Array.from(this.state.usersAround)
-                        .map(item => {
+                <View style={{ height: 300, width: 100 }}>
+                    <ScrollView>
+                        {this.state.Uids.size > 0 ? Array.from(this.state.usersAround).map(item =>
                             (
-                                <Text style={{ color: 'white' }}> {item} </Text>
+                                <Text style={{ color: 'red' }}> {item} </Text>
                             )
-                        }) : (
-                            <Text>No user found</Text>
-                        )}
+                        ) : (
+                                <Text>Find Again</Text>
+                            )}
+                    </ScrollView>
                 </View>
             </View >
         );

@@ -13,17 +13,33 @@ import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
 import { string } from '../strings/en';
+
 class Hope extends Component {
     constructor(props) {
         super(props);
         this.state = {
             username: '',
+            welcome: 'Hello',
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const userId = auth().currentUser.uid;
         database().ref('Users/' + userId).on('value', snapshot => this.setState({ username: snapshot.val().userName }))
+
+        const date = new Date();
+        const getHour = date.getHours();
+        if (getHour >= 0 && getHour < 10) {
+            this.setState({ welcome: string.goodMorning })
+        } else if (getHour >= 10 && getHour < 14) {
+            this.setState({ welcome: string.goodNoon })
+        } else if (getHour >= 14 && getHour < 18) {
+            this.setState({ welcome: string.goodAfternoon })
+        } else if (getHour >= 18 && getHour < 22) {
+            this.setState({ welcome: string.goodEvening })
+        } else if (getHour >= 22 && getHour < 24) {
+            this.setState({ welcome: string.goodNight })
+        }
     }
 
     handleFindButton = () => {
@@ -39,12 +55,12 @@ class Hope extends Component {
     }
 
     render() {
-        const { username } = this.state
+        const { username, welcome } = this.state
         return (
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.headerText}>{string.goodMorning}</Text>
-                    <Text style={styles.username}>{username}!</Text>
+                    <Text style={styles.headerText}>{welcome}</Text>
+                    <Text style={styles.username}>{username}.</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
                     <Text style={styles.buttonText}>{string.findHomemate}</Text>
@@ -73,6 +89,7 @@ class Hope extends Component {
                 <TouchableOpacity onPress={this.moveToPlanScreen} style={styles.find}>
                     <Text style={styles.buttonText} > {string.plan} </Text>
                 </TouchableOpacity>
+
             </View >
         );
     }

@@ -34,13 +34,16 @@
     "react-native-micro-animated-button": "^0.0.28",
     "react-native-modal": "^11.5.4",
     "react-native-paper": "^3.6.0",
+    "react-native-pulse": "^1.0.7",
     "react-native-push-notification": "^3.1.9",
     "react-native-raw-bottom-sheet": "^2.0.6",
     "react-native-reanimated": "^1.7.0",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.2.0",
+    "react-native-swipeout": "^2.3.6",
     "react-native-vector-icons": "^6.6.0",
-    "reinput": "^3.7.1"
+    "reinput": "^3.7.1",
+    "uuid": "^7.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

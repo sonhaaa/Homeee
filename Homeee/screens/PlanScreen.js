@@ -1,16 +1,33 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Button, TouchableOpacity } from 'react-native';
 
 import { string } from '../strings/en';
 import Modal from "react-native-modal";
 import NewPlan from '../components/NewPlan';
+import PlanItem from '../components/PlanItem';
+
+
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
 
 class PlanScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isModalVisible: false
+            isModalVisible: false,
+            planData: [],
         };
+    }
+
+    async componentDidMount() {
+        const uid = auth().currentUser.uid;
+        database().ref('Users/' + uid + '/Plans/').on("value", snapshot => {
+            let data = snapshot.val() ? Object.keys(snapshot.val()) : [];
+            let planItem = [...data];
+            this.setState({
+                planData: planItem.reverse(),
+            });
+        })
     }
 
     toggleModal = () => {
@@ -18,10 +35,11 @@ class PlanScreen extends Component {
     };
 
     render() {
+        const { planData } = this.state;
         return (
             <View style={styles.container}>
                 <Text style={styles.header}>{string.plan}</Text>
-                <Button title="Show modal" onPress={this.toggleModal} />
+                <Button title="add" onPress={this.toggleModal} />
                 <Modal
                     testID={'modal'}
                     isVisible={this.state.isModalVisible}
@@ -45,6 +63,15 @@ class PlanScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </Modal>
+                <ScrollView>
+                    {planData.length > 0 ? (
+                        planData.map(key => (
+                            <PlanItem type='people' username={key} idPlanItem={key} />
+                        ))
+                    ) : (
+                            <Text>No plan yet </Text>
+                        )}
+                </ScrollView>
             </View>
         );
     }
