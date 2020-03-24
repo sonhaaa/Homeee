@@ -12,6 +12,7 @@ import PlanScreen from './PlanScreen';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
+import { color } from '../assets/color/color';
 import { string } from '../strings/en';
 
 class Hope extends Component {
@@ -20,12 +21,18 @@ class Hope extends Component {
         this.state = {
             username: '',
             welcome: 'Hello',
+            colorPalette: 'redPalette',
+            isDarkMode: false
         };
     }
 
     async componentDidMount() {
         const userId = auth().currentUser.uid;
-        database().ref('Users/' + userId).on('value', snapshot => this.setState({ username: snapshot.val().userName }))
+        database().ref('Users/' + userId).on('value', snapshot => this.setState({
+            username: snapshot.val().userName,
+            colorPalette: snapshot.val().colorPalette,
+            isDarkMode: snapshot.val().isDarkMode
+        }))
 
         const date = new Date();
         const getHour = date.getHours();
@@ -55,12 +62,12 @@ class Hope extends Component {
     }
 
     render() {
-        const { username, welcome } = this.state
+        const { username, welcome, isDarkMode, colorPalette } = this.state
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }]}>
                 <View>
-                    <Text style={styles.headerText}>{welcome}</Text>
-                    <Text style={styles.username}>{username}.</Text>
+                    <Text style={[styles.headerText, { color: isDarkMode ? color.darkTextColor : color.lightTextColor }]}>{welcome}</Text>
+                    <Text style={[styles.username, { color: color[colorPalette].level5 }]}>{username}.</Text>
                 </View>
                 <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
                     <Text style={styles.buttonText}>{string.findHomemate}</Text>
@@ -97,7 +104,6 @@ class Hope extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
         flex: 1,
         justifyContent: 'center',
         alignItems: "center",

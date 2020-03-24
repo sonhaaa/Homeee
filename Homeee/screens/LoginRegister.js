@@ -30,8 +30,6 @@ class LoginRegisterScreen extends Component {
             isLogin: true,
             registerColor: 'red',
             loginColor: 'green',
-            isDarkMode: false,
-            backgroundColor: color.lightBackgroundColor
         };
     }
 
@@ -177,17 +175,11 @@ class LoginRegisterScreen extends Component {
     }
 
     render() {
-        const { registerColor, loginColor, isLogin, isDarkMode } = this.state;
+        const { registerColor, loginColor, isLogin } = this.state;
         return (
             <Root>
-                <View style={[styles.container,
-                { backgroundColor: isDarkMode ? (color.darkBackgroundColor) : (color.lightBackgroundColor) }]}>
-                    <Text style={{ fontFamily: 'sofialight' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
-                    <Switch
-                        style={{ marginTop: 30 }}
-                        onValueChange={this.changeMode}
-                        value={isDarkMode}
-                    />
+                <View style={[styles.container]}>
+
                     <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
                         <TouchableOpacity onPress={this.handleChangeToLogin}>
                             <Text style={[styles.loginText, { color: loginColor }]}>{string.login}</Text>
@@ -240,7 +232,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 2,
         justifyContent: "center",
-        backgroundColor: "#F5FCFF"
+        backgroundColor: color.lightBackgroundColor
     },
     input: {
         fontFamily: 'sofialight',
@@ -248,11 +240,12 @@ const styles = StyleSheet.create({
         width: 250
     },
     submitButton: {
-        backgroundColor: "yellow",
+        backgroundColor: color.darkBackgroundColor,
         padding: 10,
         fontFamily: 'Sofiabold',
         alignItems: "center",
         height: 40,
+        color: 'white'
     },
     loginText: {
         color: 'red',

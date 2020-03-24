@@ -13,9 +13,9 @@ export const string = {
     hope: 'Hope',
     you: 'You',
     happy: 'Happy',
-    currentDistrict: 'Current district',
+    currentProvince: 'Current province',
     currentTown: 'Current town',
-    homeDistrict: 'Home district',
+    homeProvince: 'Home province',
     homeTown: 'Home town',
     goodMorning: 'Good morning,',
     goodNoon: 'Good noon,',
@@ -26,5 +26,12 @@ export const string = {
     fullFill: 'Let fill full information',
     createNewPlan: 'New plan',
     addAction: 'Action',
-    with: 'with'
+    with: 'with',
+    profile: 'Profile',
+    contact: 'Contact',
+    recommend: 'Recommend',
+    planPlace: 'At',
+    at: 'At',
+    chooseFavoriteColor: 'Choose your favorite color',
+    close: 'Close'
 }

@@ -6,41 +6,76 @@ import { string } from '../strings/en';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 
-export default function NewPlan({ type, username }) {
-    const [value, setValue] = useState('');
-    const addPlan = (title, action) => {
+export default function NewPlan({ type, username, placeName }) {
+
+    const [action, setValue, place] = useState('');
+
+    const addPlan = (title, place) => {
         const uid = auth().currentUser.uid;
+
         database().ref('Users/' + uid + '/Plans').push({
             title: title,
-            action: action,
-            isDone: false
+            isDone: false,
+            place: place
         })
-        setValue({ value: '' })
+        setValue({ action: '', place: '' })
     }
+
+    const handleTypeOfNewPlan = (type) => {
+        if (type === "people") {
+            return (
+                <View style={{ flexDirection: 'row' }}>
+                    <TextInput
+                        placeholder={string.addAction}
+                        style={styles.addAction}
+                        onChangeText={(action) => setValue(action)}
+                        value={action}
+                    />
+                    <Text style={styles.with}>{string.with} </Text>
+                    <Text style={styles.username}>{username}</Text>
+                    <View>
+                        <TouchableOpacity onPress={() => addPlan(`${action} ${string.with} ${username}`, `${placeName}`)}>
+                            <Text>
+                                Add
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+
+        if (type === "place") {
+            return (
+                <View style={{ flexDirection: 'column' }}>
+                    <TextInput
+                        placeholder={string.addAction}
+                        style={styles.addAction}
+                        onChangeText={(action) => setValue(action)}
+                        value={action}
+                    />
+                    <Text style={styles.with}>{string.at} </Text>
+                    <Text style={styles.username}>{placeName}</Text>
+                    <View>
+                        <TouchableOpacity onPress={() => addPlan(`${action} ${string.with} ${username}`, `${placeName}`)}>
+                            <Text>
+                                Add
+                        </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>{string.createNewPlan}</Text>
             <View style={styles.title}>
-                <TextInput
-                    placeholder={string.addAction}
-                    style={styles.addAction}
-                    onChangeText={(value) => setValue(value)}
-                    value={value}
-                />
-                {type === 'people' ? (
-                    <View style={{ flexDirection: 'row' }}>
-                        <Text style={styles.with}>{string.with} </Text>
-                        <Text style={styles.username}>{username}</Text>
-                    </View>
-                ) : (
-                        null
-                    )}
+
+                {handleTypeOfNewPlan(type)}
             </View>
-            <TouchableOpacity onPress={() => addPlan('with sonha', value)}>
-                <Text>
-                    Add
-                </Text>
-            </TouchableOpacity>
+
+
         </View>
     )
 }

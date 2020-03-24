@@ -2,32 +2,46 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, ScrollView, Button, TouchableOpacity } from 'react-native';
 
 import { string } from '../strings/en';
+import { color } from '../assets/color/color';
+
 import Modal from "react-native-modal";
 import NewPlan from '../components/NewPlan';
 import PlanItem from '../components/PlanItem';
 
-
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
+
+import Ripple from 'react-native-material-ripple';
 
 class PlanScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isModalVisible: false,
-            planData: [],
+            allPlanId: [],
+            uid: '',
+            title: '',
+            planData: {},
+            colorPalette: 'redPalette',
+            isDarkMode: false
         };
     }
 
     async componentDidMount() {
         const uid = auth().currentUser.uid;
+        this.setState({ uid: uid })
         database().ref('Users/' + uid + '/Plans/').on("value", snapshot => {
             let data = snapshot.val() ? Object.keys(snapshot.val()) : [];
             let planItem = [...data];
             this.setState({
-                planData: planItem.reverse(),
+                allPlanId: planItem.reverse(),
+                planData: snapshot.val()
             });
         })
+        database().ref('Users/' + uid).on('value', snapshot => this.setState({
+            colorPalette: snapshot.val().colorPalette,
+            isDarkMode: snapshot.val().isDarkMode
+        }))
     }
 
     toggleModal = () => {
@@ -35,15 +49,24 @@ class PlanScreen extends Component {
     };
 
     render() {
-        const { planData } = this.state;
+        const { allPlanId, planData, isDarkMode, colorPalette } = this.state;
         return (
-            <View style={styles.container}>
-                <Text style={styles.header}>{string.plan}</Text>
-                <Button title="add" onPress={this.toggleModal} />
+            <View style={[styles.container, { backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }]}>
+                <Text style={[styles.header, { color: color[colorPalette].level5 }]}>{string.plan}</Text>
+                <Ripple
+                    style={{ backgroundColor: color[colorPalette].level4, width: 200, height: 50 }}
+                    rippleColor={color[colorPalette].level2}
+                    rippleOpacity={0.87}
+                    rippleDuration={1200}
+                    onPress={() => this.toggleModal()}
+                >
+                    <Text style={{ fontFamily: 'sofiabold', color: color.darkTextColor }} > Add </Text>
+                </Ripple>
+                {/* <Button title="add" onPress={} /> */}
                 <Modal
                     testID={'modal'}
                     isVisible={this.state.isModalVisible}
-                    backdropColor="#B4B3DB"
+                    backdropColor={color.backdropColor}
                     backdropOpacity={0.8}
                     animationIn="zoomInDown"
                     animationOut="zoomOutUp"
@@ -55,21 +78,21 @@ class PlanScreen extends Component {
                 >
                     <View style={{ width: 250, height: 200 }}>
                         <NewPlan
-                            //type='people'
+                            type='people'
                             username='sonha'
                         />
                         <TouchableOpacity onPress={this.toggleModal} style={styles.buttonClose}>
-                            <Text> HIDE </Text>
+                            <Text> {string.close} </Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
                 <ScrollView>
-                    {planData.length > 0 ? (
-                        planData.map(key => (
-                            <PlanItem type='people' username={key} idPlanItem={key} />
+                    {allPlanId.length > 0 ? (
+                        allPlanId.map(idPlan => (
+                            <PlanItem idPlanItem={idPlan} title={planData[idPlan].title} place={planData[idPlan].place} />
                         ))
                     ) : (
-                            <Text>No plan yet </Text>
+                            <Text style={{ color: color[colorPalette].level2, fontFamily: 'sofialight' }} >No plan yet </Text>
                         )}
                 </ScrollView>
             </View>
@@ -115,7 +138,8 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 20,
         backgroundColor: 'white',
         alignItems: "center",
-        alignContent: 'center'
+        alignContent: 'center',
+        height: 25
     }
 });
 

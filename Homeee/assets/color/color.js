@@ -44,5 +44,6 @@ export const color = {
         level3: '#9a68ed',
         level4: '#7763e9',
         level5: '#5e49d4'
-    }
+    },
+    backdropColor: '#e8e8e8'
 }

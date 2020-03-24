@@ -19,9 +19,9 @@ class FindPeopleAround extends Component {
             longitude: 107,
             latitudeDelta: 0.095,
             longitudeDelta: 0.05,
-            currentDistrict: '',
+            currentProvince: '',
             homeTown: '',
-            homeDistrict: '',
+            homeProvince: '',
             allUsersData: {},
             Uids: new Set(),
             usersAround: new Set(),
@@ -38,7 +38,7 @@ class FindPeopleAround extends Component {
         const uid = auth().currentUser.uid;
         var ref = database().ref("Users");
         ref.orderByChild(param)
-            .equalTo(this.state.currentDistrict)
+            .equalTo(this.state.currentProvince)
             .on("child_added", snapshot => { snapshot.key !== uid ? this.setState({ Uids: this.state.Uids.add(snapshot.key) }) : null });
     }
 
@@ -56,11 +56,11 @@ class FindPeopleAround extends Component {
             .then(snapshot => {
                 const snapShotVal = snapshot.val();
                 this.setState({
-                    currentDistrict: snapShotVal.currentDistrict,
-                    homeDistrict: snapShotVal.homeDistrict,
+                    currentProvince: snapShotVal.currentProvince,
+                    homeProvince: snapShotVal.homeProvince,
                     homeTown: snapShotVal.homeTown
                 }),
-                    this.filterUsers('currentDistrict');
+                    this.filterUsers('currentProvince');
             })
     };
 
@@ -77,7 +77,7 @@ class FindPeopleAround extends Component {
             if (userId !== currentUserId) {
                 if (this.state.allUsersData[userId].homeTown === this.state.homeTown) {
                     this.state.usersAround.add(this.getUsername(userId))
-                } else if (this.state.allUsersData[userId].homeDistrict === this.state.homeDistrict) {
+                } else if (this.state.allUsersData[userId].homeProvince === this.state.homeProvince) {
                     this.state.usersAround.add(this.getUsername(userId))
                 }
             }

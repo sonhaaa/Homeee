@@ -10,17 +10,42 @@ import HappyScreen from './HappyScreen';
 
 import { string } from '../strings/en';
 
+import { color } from '../assets/color/color';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth'
+
 const Tab = createMaterialBottomTabNavigator();
 
 export default class HomeScreen extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            colorPalette: 'redPalette',
+            isDarkMode: false
+        }
+    }
+
+    componentDidMount() {
+        const uid = auth().currentUser.uid;
+        database().ref('Users/' + uid).on('value', snapshot => this.setState({
+            colorPalette: snapshot.val().colorPalette,
+            isDarkMode: snapshot.val().isDarkMode
+        }))
+    }
+
     render() {
+        const { colorPalette, isDarkMode } = this.state
         return (
             <NavigationContainer independent={true}>
                 <Tab.Navigator
-                    inactiveColor='white'
-                    activeColor='red'
-                    barStyle={{ backgroundColor: 'pink', fontFamily: 'Sofiabold', borderTopLeftRadius: 20 }}
+                    inactiveColor={isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor}
+                    activeColor={color[colorPalette].level5}
+                    barStyle={{
+                        backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor,
+                        fontFamily: 'Sofiabold',
+                        borderTopLeftRadius: 20
+                    }}
                     style={{ fontFamily: 'sofialight' }}
                     backBehavior="initialRoute"
                 >

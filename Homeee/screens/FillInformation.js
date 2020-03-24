@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, BackHandler } from 'react-native';
 
 import { Dropdown } from 'react-native-material-dropdown';
 import { districtsData } from '../strings/data';
@@ -9,7 +9,8 @@ import auth from '@react-native-firebase/auth';
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-import HomeScreen from './HomeScreen';
+import ChooseColorScreen from './ChooseColorScreen';
+
 import { string } from '../strings/en';
 
 import Btn from 'react-native-micro-animated-button';
@@ -18,12 +19,12 @@ class FillInformationSceen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dataDistrict: districtsData,
+            dataProvince: districtsData,
             value: '',
-            homeDistrict: '',
+            homeProvince: '',
             userName: '',
             homeTown: '',
-            currentDistrict: '',
+            currentProvince: '',
             currentTown: ''
         }
     }
@@ -34,14 +35,14 @@ class FillInformationSceen extends Component {
         const ref = database().ref(`Users/${uid}`);
         ref.update({
             userName: this.state.userName,
-            homeDistrict: this.state.homeDistrict,
+            homeProvince: this.state.homeProvince,
             homeTown: this.state.homeTown,
-            currentDistrict: this.state.currentDistrict,
+            currentProvince: this.state.currentProvince,
             currentTown: this.state.currentTown,
         })
             .then(
                 this.btn.success(),
-                this.props.navigation.navigate('HomeScreen')
+                this.props.navigation.navigate('ChooseColorScreen')
             ).catch(err => { this.btn.error(), alert('Ko them duoc, thu lai sau' + err) });
     };
 
@@ -71,11 +72,11 @@ class FillInformationSceen extends Component {
                     <TextInput
                         style={styles.input}
                         underlineColorAndroid="transparent"
-                        placeholder={string.currentDistrict}
+                        placeholder={string.currentProvince}
                         placeholderTextColor="black"
                         autoCapitalize="none"
-                        value={this.state.currentDistrict}
-                        onChangeText={(currentDistrict) => this.setState({ currentDistrict })}
+                        value={this.state.currentProvince}
+                        onChangeText={(currentProvince) => this.setState({ currentProvince })}
                     />
                     <TextInput
                         style={styles.input}
@@ -87,15 +88,15 @@ class FillInformationSceen extends Component {
                         onChangeText={(currentTown) => this.setState({ currentTown })}
                     />
                     <Dropdown
-                        label={string.homeDistrict}
-                        data={this.state.dataDistrict}
-                        onChangeText={(homeDistrict) => {
+                        label={string.homeProvince}
+                        data={this.state.dataProvince}
+                        onChangeText={(homeProvince) => {
                             this.setState({
-                                homeDistrict
+                                homeProvince
                             });
                         }}
                     />
-                    <Text style={{ color: 'green', marginTop: 50 }}> {this.state.homeDistrict} </Text>
+                    <Text style={{ color: 'green', marginTop: 50 }}> {this.state.homeProvince} </Text>
                     <TextInput
                         style={styles.input}
                         underlineColorAndroid="transparent"
@@ -149,7 +150,7 @@ function FillInformation() {
         // <NavigationContainer independent={true}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='FillInformationSceen' component={FillInformationSceen} i />
-            <Stack.Screen name='HomeScreen' component={HomeScreen} />
+            <Stack.Screen name='ChooseColorScreen' component={ChooseColorScreen} />
         </Stack.Navigator>
         // </NavigationContainer>
     )
