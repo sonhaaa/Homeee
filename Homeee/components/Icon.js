@@ -6,7 +6,7 @@ export default function Icon({ name, color, size }) {
     const handle = () => {
         if (name === 'hope') {
             return (
-                <View style={{ width: size + 7, height: size + 7, borderRadius: (size + 7) / 2, backgroundColor: color, justifyContent: "center", alignItems: "center" }}>
+                <View style={{ width: size + 10, height: size + 10, borderRadius: (size + 10) / 2, backgroundColor: color, justifyContent: "center", alignItems: "center" }}>
                     <Image
                         source={require('../assets/imgs/flower.png')}
                         style={{ width: size, height: size }}
@@ -15,7 +15,7 @@ export default function Icon({ name, color, size }) {
             )
         } else if (name === 'you') {
             return (
-                <View style={{ width: size + 7, height: size + 7, borderRadius: (size + 7) / 2, backgroundColor: color, justifyContent: "center", alignItems: "center" }}>
+                <View style={{ width: size + 10, height: size + 10, borderRadius: (size + 10) / 2, backgroundColor: color, justifyContent: "center", alignItems: "center" }}>
 
                     <Image
                         source={require('../assets/imgs/avatar.png')}
@@ -25,7 +25,7 @@ export default function Icon({ name, color, size }) {
             )
         } else if (name === 'happy') {
             return (
-                <View style={{ width: size + 7, height: size + 7, borderRadius: (size + 7) / 2, backgroundColor: color, justifyContent: "center", alignItems: "center" }}>
+                <View style={{ width: size + 10, height: size + 10, borderRadius: (size + 10) / 2, backgroundColor: color, justifyContent: "center", alignItems: "center" }}>
 
                     <Image
                         source={require('../assets/imgs/smiling.png')}

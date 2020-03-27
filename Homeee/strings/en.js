@@ -27,11 +27,18 @@ export const string = {
     createNewPlan: 'New plan',
     addAction: 'Action',
     with: 'with',
-    profile: 'Profile',
-    contact: 'Contact',
+    profile: 'profile',
+    contact: 'contact',
     recommend: 'Recommend',
     planPlace: 'At',
     at: 'At',
     chooseFavoriteColor: 'Choose your favorite color',
-    close: 'Close'
+    close: 'Close',
+    darkMode: 'Dark mode',
+    diaryDescription: 'How is your day?',
+    planDescription: 'Do it!',
+    yourThings: 'Your things',
+    noPlanYet: 'No plan yet',
+    done: 'Done',
+    placeHolder: 'What you gonna do with who'
 }

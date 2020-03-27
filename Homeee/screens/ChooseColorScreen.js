@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Switch } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from './HomeScreen';
@@ -10,6 +10,7 @@ import { string } from '../strings/en';
 import { color } from '../assets/color/color'
 
 import Ripple from 'react-native-material-ripple';
+import { Switch } from 'react-native-switch';
 
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
@@ -134,76 +135,107 @@ class ChooseColor extends Component {
         const { lv1, lv2, lv3, lv4, lv5, isDarkMode } = this.state;
         return (
             <View style={{ flex: 1, backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }}>
-                <Text style={{ color: isDarkMode ? color.darkTextColor : color.lightTextColor }} >{string.chooseFavoriteColor}</Text>
+                <View style={{ flexDirection: 'row-reverse', margin: 20 }}>
+                    <Switch
+                        value={isDarkMode}
+                        onValueChange={this.changeMode}
+                        circleSize={20}
+                        barHeight={20}
+                        circleBorderWidth={3}
+                        backgroundActive={color.lightBackgroundColor}
+                        backgroundInactive={color.darkBackgroundColor}
+                        circleActiveColor={color.lightBackgroundColor}
+                        circleInActiveColor={color.lightBackgroundColor}
+                        changeValueImmediately={true}
+                        innerCircleStyle={{ alignItems: "center", justifyContent: "center" }}
+                        switchLeftPx={2}
+                        switchRightPx={2}
+                        switchBorderRadius={30}
+                    />
+                </View>
+                <View style={{ alignItems: 'center', marginTop: 80 }}>
+                    <Text style={{ color: isDarkMode ? color.darkTextColor : color.lightTextColor, fontFamily: 'sofialight' }} >{string.chooseFavoriteColor}</Text>
+                </View>
 
-                <Text style={{ fontFamily: 'sofialight' }} >{isDarkMode ? 'Switch is ON' : 'Switch is OFF'}</Text>
-                <Switch
-                    style={{ marginTop: 30 }}
-                    onValueChange={this.changeMode}
-                    value={isDarkMode}
-                />
+                <View style={{ justifyContent: "center", alignItems: "center", marginTop: 30 }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Ripple
+                            style={[styles.options, { backgroundColor: color.redPalette.level5 }]}
+                            rippleColor='white'
+                            rippleOpacity={0.87}
+                            rippleDuration={1200}
+                            onPress={() => this.handle('red')}
+                        />
+                        <Ripple
+                            style={[styles.optionsMid, { backgroundColor: color.yellowPalette.level5 }]}
+                            rippleColor='white'
+                            rippleOpacity={0.87}
+                            rippleDuration={1200}
+                            onPress={() => this.handle('yellow')}
+                        />
+                        <Ripple
+                            style={[styles.options, { backgroundColor: color.pinkPalette.level5 }]}
+                            rippleColor='white'
+                            rippleOpacity={0.87}
+                            rippleDuration={1200}
+                            onPress={() => this.handle('pink')}
+                        />
+                    </View>
+                    <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                        <Ripple
+                            style={[styles.options, { backgroundColor: color.greenPalette.level5 }]}
+                            rippleColor='white'
+                            rippleOpacity={0.87}
+                            rippleDuration={1200}
+                            onPress={() => this.handle('green')}
+                        />
 
-                <View>
-                    <Ripple
-                        style={[styles.options, { backgroundColor: color.redPalette.level5 }]}
-                        rippleColor='white'
-                        rippleOpacity={0.87}
-                        rippleDuration={1200}
-                        onPress={() => this.handle('red')}
-                    />
-                    <Ripple
-                        style={[styles.options, { backgroundColor: color.yellowPalette.level5 }]}
-                        rippleColor='white'
-                        rippleOpacity={0.87}
-                        rippleDuration={1200}
-                        onPress={() => this.handle('yellow')}
-                    />
-                    <Ripple
-                        style={[styles.options, { backgroundColor: color.pinkPalette.level5 }]}
-                        rippleColor='white'
-                        rippleOpacity={0.87}
-                        rippleDuration={1200}
-                        onPress={() => this.handle('pink')}
-                    />
-                    <Ripple
-                        style={[styles.options, { backgroundColor: color.greenPalette.level5 }]}
-                        rippleColor='white'
-                        rippleOpacity={0.87}
-                        rippleDuration={1200}
-                        onPress={() => this.handle('green')}
-                    />
+                        <Ripple
+                            style={[styles.optionsMid, { backgroundColor: color.purplePalette.level5 }]}
+                            rippleColor='white'
+                            rippleOpacity={0.87}
+                            rippleDuration={1200}
+                            onPress={() => this.handle('purple')}
+                        />
 
-                    <Ripple
-                        style={[styles.options, { backgroundColor: color.purplePalette.level5 }]}
-                        rippleColor='white'
-                        rippleOpacity={0.87}
-                        rippleDuration={1200}
-                        onPress={() => this.handle('purple')}
-                    />
+                        <Ripple
+                            style={[styles.options, { backgroundColor: color.bluePalette.level5 }]}
+                            rippleColor='white'
+                            rippleOpacity={0.87}
+                            rippleDuration={1200}
+                            onPress={() => this.handle('blue')}
+                        />
+                    </View>
+                </View>
 
-                    <Ripple
-                        style={[styles.options, { backgroundColor: color.bluePalette.level5 }]}
-                        rippleColor='white'
-                        rippleOpacity={0.87}
-                        rippleDuration={1200}
-                        onPress={() => this.handle('blue')}
+                <View style={{
+                    marginTop: 50,
+                    shadowOffset: { width: 0, height: 15 },
+                    shadowOpacity: 0.5,
+                    shadowRadius: 90,
+                    elevation: 20,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ backgroundColor: lv5, width: 40, height: 40, borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }} />
+                        <View style={{ backgroundColor: lv4, width: 40, height: 40 }} />
+                        <View style={{ backgroundColor: lv3, width: 40, height: 40 }} />
+                        <View style={{ backgroundColor: lv2, width: 40, height: 40 }} />
+                        <View style={{ backgroundColor: lv1, width: 40, height: 40, borderTopRightRadius: 20, borderBottomRightRadius: 20 }} />
+                    </View>
+                </View>
+
+                <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 100 }}>
+                    <Btn
+                        foregroundColor={color.default.level5}
+                        label={string.addMyInfomation}
+                        onPress={() => this.handleSubmit()}
+                        ref={ref => (this.btn = ref)}
+                        successIcon="check"
                     />
                 </View>
 
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ backgroundColor: lv5, width: 50, height: 50, borderTopLeftRadius: 25, borderBottomLeftRadius: 25 }} />
-                    <View style={{ backgroundColor: lv4, width: 50, height: 50 }} />
-                    <View style={{ backgroundColor: lv3, width: 50, height: 50 }} />
-                    <View style={{ backgroundColor: lv2, width: 50, height: 50 }} />
-                    <View style={{ backgroundColor: lv1, width: 50, height: 50, borderTopRightRadius: 25, borderBottomRightRadius: 25 }} />
-                </View>
-
-                <Btn
-                    label={string.addMyInfomation}
-                    onPress={() => this.handleSubmit()}
-                    ref={ref => (this.btn = ref)}
-                    successIcon="check"
-                />
             </View >
         );
     }
@@ -218,9 +250,14 @@ const styles = StyleSheet.create({
         width: 20,
         borderRadius: 10
     },
-    red: {
+    optionsMid: {
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        marginLeft: 15,
+        marginRight: 15
+    },
 
-    }
 });
 
 const Stack = createStackNavigator();

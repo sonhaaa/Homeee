@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { string } from '../strings/en';
+import { color } from '../assets/color/color';
 
 import Modal from "react-native-modal";
 
@@ -18,13 +19,21 @@ class HappyScreen extends Component {
             isAddPlanModalVisible: false,
             isMoreModalVisible: false,
             placesId: new Set(),
-            placesData: [""]
+            placesData: [""],
+            colorPalette: 'default',
+            isDarkMode: false
         };
     }
 
     componentDidMount() {
         const uid = auth().currentUser.uid;
         database().ref('Users/' + uid).on('value', snapshot => {
+
+
+            this.setState({
+                colorPalette: snapshot.val().colorPalette,
+                isDarkMode: snapshot.val().isDarkMode
+            })
 
             const currentProvince = snapshot.val().currentProvince;
 
@@ -57,7 +66,7 @@ class HappyScreen extends Component {
     }
 
     render() {
-        const { isAddPlanModalVisible, isMoreModalVisible, placesData } = this.state;
+        const { isAddPlanModalVisible, isMoreModalVisible, placesData, isDarkMode, colorPalette } = this.state;
         return (
             <View style={styles.container}>
                 <View style={styles.recommendItem}>
@@ -95,10 +104,13 @@ class HappyScreen extends Component {
                     backdropTransitionOutTiming={600}
                     style={{ alignItems: 'center', justifyContent: "center" }}
                 >
-                    <View style={{ width: 250, height: 200 }}>
+                    <View style={{ height: '70%', width: '70%' }}>
                         <NewPlan
                             type='place'
-                            placeName='The Coffee house'
+                            placeName='The coffee house'
+                            color1={color[colorPalette].level2}
+                            color2={color[colorPalette].level3}
+                            color3={color[colorPalette].level4}
                         />
                         <TouchableOpacity onPress={this.handleAddPlan} style={styles.buttonClose}>
                             <Text> HIDE </Text>

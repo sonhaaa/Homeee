@@ -1,5 +1,5 @@
 export const color = {
-    lightBackgroundColor: '#f2f7fa',
+    lightBackgroundColor: '#ffffff',
     darkBackgroundColor: '#242633',
     lightTextColor: '#000000',
     darkTextColor: '#ffffff',
@@ -45,5 +45,13 @@ export const color = {
         level4: '#7763e9',
         level5: '#5e49d4'
     },
-    backdropColor: '#e8e8e8'
+    default: {
+        level1: '#c7c7c7',
+        level2: '#989898',
+        level3: '#646464',
+        level4: '#3c3c3c',
+        level5: '#000000'
+    },
+    backdropColor: '#e8e8e8',
+    lightDarkColor: '#383941'
 }

@@ -28,8 +28,8 @@ class LoginRegisterScreen extends Component {
             password: '',
             userData: {},
             isLogin: true,
-            registerColor: 'red',
-            loginColor: 'green',
+            registerColor: color.default.level1,
+            loginColor: color.default.level5,
         };
     }
 
@@ -93,6 +93,7 @@ class LoginRegisterScreen extends Component {
                         this.props.navigation.navigate('HomeScreen')
                 })
                 .catch(function () {
+
                     Popup.show({
                         type: 'Danger',
                         title: 'Hey!!!',
@@ -100,8 +101,9 @@ class LoginRegisterScreen extends Component {
                         textBody: 'Cannot login! Please check again.',
                         buttontext: 'Ok',
                         callback: () => Popup.hide()
-                    }),
-                        this.btn.reset()
+                    })
+
+
                 });
         }
         else {
@@ -167,11 +169,11 @@ class LoginRegisterScreen extends Component {
     }
 
     handleChangeToRegister = () => {
-        this.setState({ isLogin: false, registerColor: 'green', loginColor: 'red' });
+        this.setState({ isLogin: false, registerColor: color.default.level5, loginColor: color.default.level1 });
     }
 
     handleChangeToLogin = () => {
-        this.setState({ isLogin: true, loginColor: 'green', registerColor: 'red' })
+        this.setState({ isLogin: true, loginColor: color.default.level5, registerColor: color.default.level1 })
     }
 
     render() {
@@ -180,7 +182,7 @@ class LoginRegisterScreen extends Component {
             <Root>
                 <View style={[styles.container]}>
 
-                    <View style={{ flexDirection: 'row', paddingLeft: 20 }}>
+                    <View style={{ flexDirection: 'row', marginLeft: 60 }}>
                         <TouchableOpacity onPress={this.handleChangeToLogin}>
                             <Text style={[styles.loginText, { color: loginColor }]}>{string.login}</Text>
                         </TouchableOpacity>
@@ -191,36 +193,45 @@ class LoginRegisterScreen extends Component {
                             <Text style={[styles.registerText, { color: registerColor }]}>{string.register}</Text>
                         </TouchableOpacity>
                     </View>
-                    <Reinput
-                        style={styles.input}
-                        label={string.email}
-                        value={this.state.email}
-                        onChangeText={this.handleEmail}
-                    />
-                    <Reinput
-                        style={styles.input}
-                        label={string.password}
-                        placeholderTextColor="black"
-                        autoCapitalize="none"
-                        secureTextEntry={true}
-                        value={this.state.password}
-                        onChangeText={this.handlePassword}
-                    />
-                    {isLogin ? (
-                        <Btn
-                            style={styles.submitButton}
-                            label={string.login}
-                            onPress={() => this.logIn(this.state.email, this.state.password)}
-                            ref={ref => (this.btn = ref)}
-                            successIcon="check"
+                    <View style={{ paddingLeft: 60, marginTop: 40, marginBottom: 20 }}>
+                        <Reinput
+                            style={styles.input}
+                            label={string.email}
+                            value={this.state.email}
+                            onChangeText={this.handleEmail}
                         />
-                    ) : (
+                        <Reinput
+                            style={styles.input}
+                            label={string.password}
+                            placeholderTextColor="black"
+                            autoCapitalize="none"
+                            secureTextEntry={true}
+                            value={this.state.password}
+                            onChangeText={this.handlePassword}
+                        />
+                    </View>
+                    {isLogin ? (
+                        <View style={{ justifyContent: "center", alignItems: "center", marginTop: 60 }}>
                             <Btn
-                                label={string.register}
-                                onPress={() => this.signUp(this.state.email, this.state.password)}
+
+                                label={string.login}
+                                onPress={() => this.logIn(this.state.email, this.state.password)}
                                 ref={ref => (this.btn = ref)}
-                                successIcon="heart"
+                                successIcon="check"
+                                foregroundColor={color.default.level5}
                             />
+                        </View>
+                    ) : (
+                            <View style={{ justifyContent: "center", alignItems: "center", marginTop: 60 }}>
+                                <Btn
+                                    style={styles.submitButton}
+                                    label={string.register}
+                                    onPress={() => this.signUp(this.state.email, this.state.password)}
+                                    ref={ref => (this.btn = ref)}
+                                    successIcon="heart"
+                                    foregroundColor={color.default.level5}
+                                />
+                            </View>
                         )}
                 </View>
             </Root>
@@ -237,25 +248,27 @@ const styles = StyleSheet.create({
     input: {
         fontFamily: 'sofialight',
         height: 40,
+        marginTop: 15,
         width: 250
     },
     submitButton: {
-        backgroundColor: color.darkBackgroundColor,
+        backgroundColor: 'transparent',
         padding: 10,
         fontFamily: 'Sofiabold',
         alignItems: "center",
         height: 40,
-        color: 'white'
+        width: 250,
+        //color: color.darkBackgroundColor
     },
     loginText: {
-        color: 'red',
+        color: color.default.level5,
         fontFamily: 'Sofiabold',
-        fontSize: 17
+        fontSize: 15
     },
     registerText: {
         color: 'red',
         fontFamily: 'Sofiabold',
-        fontSize: 17
+        fontSize: 15
     }
 });
 

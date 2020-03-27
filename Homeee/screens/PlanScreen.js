@@ -22,7 +22,7 @@ class PlanScreen extends Component {
             uid: '',
             title: '',
             planData: {},
-            colorPalette: 'redPalette',
+            colorPalette: 'default',
             isDarkMode: false
         };
     }
@@ -52,22 +52,36 @@ class PlanScreen extends Component {
         const { allPlanId, planData, isDarkMode, colorPalette } = this.state;
         return (
             <View style={[styles.container, { backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }]}>
-                <Text style={[styles.header, { color: color[colorPalette].level5 }]}>{string.plan}</Text>
-                <Ripple
-                    style={{ backgroundColor: color[colorPalette].level4, width: 200, height: 50 }}
-                    rippleColor={color[colorPalette].level2}
-                    rippleOpacity={0.87}
-                    rippleDuration={1200}
-                    onPress={() => this.toggleModal()}
-                >
-                    <Text style={{ fontFamily: 'sofiabold', color: color.darkTextColor }} > Add </Text>
-                </Ripple>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={[styles.header, { color: color[colorPalette].level4 }]}>{string.plan}</Text>
+
+                    <View style={{ flex: 1 }}>
+                        <Ripple
+                            style={{
+                                backgroundColor: color[colorPalette].level4,
+                                width: 30,
+                                height: 30,
+                                borderRadius: 15,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            rippleColor={color[colorPalette].level2}
+                            rippleOpacity={0.87}
+                            rippleDuration={1000}
+                            onPress={() => this.toggleModal()}
+                        >
+                            <Text style={{ fontFamily: 'Sofiabold', color: color.darkTextColor, fontSize: 25, marginBottom: 4 }} >+</Text>
+                        </Ripple>
+                    </View>
+
+                </View>
+
                 {/* <Button title="add" onPress={} /> */}
                 <Modal
                     testID={'modal'}
                     isVisible={this.state.isModalVisible}
                     backdropColor={color.backdropColor}
-                    backdropOpacity={0.8}
+                    backdropOpacity={0.5}
                     animationIn="zoomInDown"
                     animationOut="zoomOutUp"
                     animationInTiming={600}
@@ -76,23 +90,34 @@ class PlanScreen extends Component {
                     backdropTransitionOutTiming={600}
                     style={{ alignItems: 'center', justifyContent: "center" }}
                 >
-                    <View style={{ width: 250, height: 200 }}>
+                    <View style={{ height: '70%', width: '70%' }}>
                         <NewPlan
-                            type='people'
-                            username='sonha'
+                            type='normal'
+                            color1={color[colorPalette].level2}
+                            color2={color[colorPalette].level3}
+                            color3={color[colorPalette].level4}
                         />
                         <TouchableOpacity onPress={this.toggleModal} style={styles.buttonClose}>
-                            <Text> {string.close} </Text>
+                            <Text style={{ fontFamily: 'sofialight', color: color[colorPalette].level2 }} > {string.done} </Text>
                         </TouchableOpacity>
                     </View>
                 </Modal>
                 <ScrollView>
                     {allPlanId.length > 0 ? (
                         allPlanId.map(idPlan => (
-                            <PlanItem idPlanItem={idPlan} title={planData[idPlan].title} place={planData[idPlan].place} />
+                            <PlanItem
+                                idPlanItem={idPlan}
+                                title={planData[idPlan].title}
+                                place={planData[idPlan].place}
+                                colorLevel1={color[colorPalette].level2}
+                                colorLevel2={color[colorPalette].level3}
+                                colorLevel3={color[colorPalette].level4}
+                            />
                         ))
                     ) : (
-                            <Text style={{ color: color[colorPalette].level2, fontFamily: 'sofialight' }} >No plan yet </Text>
+                            <View style={{ justifyContent: "center", alignItems: "center" }}>
+                                <Text style={{ color: color[colorPalette].level2, fontFamily: 'sofialight' }} >{string.noPlanYet}</Text>
+                            </View>
                         )}
                 </ScrollView>
             </View>
@@ -107,8 +132,9 @@ const styles = StyleSheet.create({
     },
     header: {
         fontFamily: 'Sofiabold',
-        fontSize: 30,
-        margin: 20
+        fontSize: 40,
+        margin: 25,
+        flex: 5
     },
     inputContainer: {
         borderTopWidth: 1.5,
@@ -139,7 +165,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         alignItems: "center",
         alignContent: 'center',
-        height: 25
+        height: 35
     }
 });
 

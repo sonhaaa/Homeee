@@ -11,9 +11,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import ChooseColorScreen from './ChooseColorScreen';
 
+import { color } from '../assets/color/color';
 import { string } from '../strings/en';
 
 import Btn from 'react-native-micro-animated-button';
+import Reinput from 'reinput';
 
 class FillInformationSceen extends Component {
     constructor(props) {
@@ -59,59 +61,47 @@ class FillInformationSceen extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ width: 300, height: 30 }} >
-                    <TextInput
+                <View style={{ marginTop: '30%', justifyContent: 'center', alignItems: 'center', marginLeft: 70, marginRight: 70 }}>
+                    <Reinput
                         style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder={string.userName}
-                        placeholderTextColor="black"
-                        autoCapitalize="none"
+                        label={string.userName}
                         value={this.state.userName}
                         onChangeText={(userName) => this.setState({ userName })}
                     />
-                    <TextInput
+                    <Reinput
                         style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder={string.currentProvince}
-                        placeholderTextColor="black"
-                        autoCapitalize="none"
+                        label={string.currentProvince}
                         value={this.state.currentProvince}
                         onChangeText={(currentProvince) => this.setState({ currentProvince })}
                     />
-                    <TextInput
+                    <Reinput
                         style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder={string.currentTown}
-                        placeholderTextColor="black"
-                        autoCapitalize="none"
+                        label={string.currentProvince}
                         value={this.state.currentTown}
                         onChangeText={(currentTown) => this.setState({ currentTown })}
                     />
-                    <Dropdown
-                        label={string.homeProvince}
-                        data={this.state.dataProvince}
-                        onChangeText={(homeProvince) => {
-                            this.setState({
-                                homeProvince
-                            });
-                        }}
-                    />
-                    <Text style={{ color: 'green', marginTop: 50 }}> {this.state.homeProvince} </Text>
-                    <TextInput
+                    <Reinput
                         style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder={string.homeTown}
-                        placeholderTextColor="black"
-                        autoCapitalize="none"
+                        label={string.homeProvince}
+                        value={this.state.homeProvince}
+                        onChangeText={(homeProvince) => this.setState({ homeProvince })}
+                    />
+                    <Reinput
+                        style={styles.input}
+                        label={string.homeTown}
                         value={this.state.homeTown}
                         onChangeText={(homeTown) => this.setState({ homeTown })}
                     />
+
                     <Btn
+                        style={styles.submitButton}
                         label={string.addMyInfomation}
                         onPress={() => this.handleSubmit()}
                         ref={ref => (this.btn = ref)}
                         successIcon="check"
+                        foregroundColor={color.default.level5}
                     />
+
                 </View>
             </View>
         );
@@ -123,23 +113,29 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: color.lightBackgroundColor,
     },
     dropdown: {
         width: '80%',
     },
     input: {
-        margin: 15,
+        marginTop: 20,
         height: 40,
-        borderColor: "black",
-        borderWidth: 1,
-        fontFamily: 'sofialight'
+        width: 210,
+        fontFamily: 'sofialight',
+        fontSize: 12
     },
-    submit: {
-        height: 30,
-        width: 200,
-        backgroundColor: 'blue'
-    }
+    submitButton: {
+        backgroundColor: 'transparent',
+        padding: 10,
+        fontFamily: 'Sofiabold',
+        alignItems: "center",
+        height: 40,
+        width: 210,
+        borderColor: color.default.level1,
+        color: color.darkBackgroundColor,
+        marginTop: 100
+    },
 });
 
 

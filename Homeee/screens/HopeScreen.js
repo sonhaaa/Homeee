@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 
 import { createStackNavigator } from "@react-navigation/stack";
@@ -21,7 +21,7 @@ class Hope extends Component {
         this.state = {
             username: '',
             welcome: 'Hello',
-            colorPalette: 'redPalette',
+            colorPalette: 'default',
             isDarkMode: false
         };
     }
@@ -65,13 +65,87 @@ class Hope extends Component {
         const { username, welcome, isDarkMode, colorPalette } = this.state
         return (
             <View style={[styles.container, { backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }]}>
-                <View>
+                <View style={{ margin: 25 }}>
                     <Text style={[styles.headerText, { color: isDarkMode ? color.darkTextColor : color.lightTextColor }]}>{welcome}</Text>
-                    <Text style={[styles.username, { color: color[colorPalette].level5 }]}>{username}.</Text>
+                    <Text style={[styles.username, { color: color[colorPalette].level4 }]}>{username}.</Text>
                 </View>
-                <TouchableOpacity onPress={() => this.Scrollable.open()} style={styles.find}>
-                    <Text style={styles.buttonText}>{string.findHomemate}</Text>
-                </TouchableOpacity>
+
+                <View style={{ flexDirection: 'row', marginLeft: 25, marginRight: 25, flex: 1 }}>
+
+                    <View style={{ marginRight: 12, flex: 1 }}>
+                        {/* find people */}
+                        <TouchableOpacity onPress={this.moveToDiaryScreen} style={{ height: 240, backgroundColor: color[colorPalette].level3, borderRadius: 20, }}>
+                            <Text style={{
+                                marginLeft: 20,
+                                marginTop: 20,
+                                color: color.darkTextColor,
+                                fontFamily: 'sofialight'
+                            }} > {string.diary} </Text>
+                            <Text style={{
+                                marginLeft: 20,
+                                fontSize: 12,
+                                color: color[colorPalette].level1,
+                                fontFamily: 'sofialight'
+                            }} > {string.diaryDescription} </Text>
+                            <View style={{ flexDirection: 'row-reverse', marginTop: 30 }}>
+                                <Image
+                                    style={{
+                                        width: 95,
+                                        height: 150,
+                                    }}
+                                    source={require('../assets/imgs/diary.png')}
+                                />
+                            </View>
+                        </TouchableOpacity>
+
+                    </View>
+
+                    <View style={{ marginLeft: 13, flex: 1 }}>
+
+                        <TouchableOpacity
+                            onPress={() => this.Scrollable.open()}
+                            style={{
+                                height: 200,
+                                backgroundColor: color[colorPalette].level2,
+                                borderRadius: 20,
+                            }}>
+                            <Text
+                                style={{
+                                    margin: 20,
+                                    color: color.darkTextColor,
+                                    fontFamily: 'sofialight'
+                                }}
+                            >{string.findHomemate}</Text>
+                            <View style={{ flexDirection: 'row-reverse', marginTop: 10, marginLeft: 10 }}>
+                                <Image
+                                    style={{
+                                        width: 100,
+                                        height: 100,
+                                    }}
+                                    source={require('../assets/imgs/findfriend.png')}
+                                />
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={this.moveToPlanScreen} style={{ height: 120, width: '100%', backgroundColor: color[colorPalette].level4, marginTop: 25, borderRadius: 20 }}>
+                            <Text style={{
+                                marginLeft: 20,
+                                marginTop: 20,
+                                color: color.darkTextColor,
+                                fontFamily: 'sofialight'
+                            }} > {string.plan} </Text>
+                            <Text style={{
+                                marginLeft: 20,
+                                fontSize: 12,
+                                color: color[colorPalette].level1,
+                                fontFamily: 'sofialight'
+                            }} > {string.planDescription} </Text>
+                        </TouchableOpacity>
+
+                    </View>
+                </View>
+
+
                 <RBSheet
                     ref={ref => {
                         this.Scrollable = ref;
@@ -81,21 +155,18 @@ class Hope extends Component {
                         container: {
                             borderTopLeftRadius: 10,
                             borderTopRightRadius: 10,
+                            backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor
                         }
                     }}
                     height={550}
                     duration={350}
+
                 >
-                    <ScrollView>
+                    <ScrollView style={{ backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }}>
                         <FindPeopleAround />
                     </ScrollView>
                 </RBSheet>
-                <TouchableOpacity onPress={this.moveToDiaryScreen} style={styles.find}>
-                    <Text style={styles.buttonText} > {string.diary} </Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.moveToPlanScreen} style={styles.find}>
-                    <Text style={styles.buttonText} > {string.plan} </Text>
-                </TouchableOpacity>
+
 
             </View >
         );
@@ -105,15 +176,13 @@ class Hope extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: "center",
     },
     headerText: {
-        fontSize: 14,
+        fontSize: 17,
         fontFamily: 'sofialight'
     },
     username: {
-        fontSize: 18,
+        fontSize: 20,
         fontFamily: 'Sofiabold'
     },
     find: {

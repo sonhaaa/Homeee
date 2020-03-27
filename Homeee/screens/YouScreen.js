@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
+import { color } from '../assets/color/color';
 import { string } from '../strings/en';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -22,12 +23,18 @@ class YouScreen extends Component {
             currentUsername: '',
             isModalVisible: false,
             uri: null,
+            colorPalette: 'default',
+            isDarkMode: false
         };
     }
 
     componentDidMount() {
         const uid = auth().currentUser.uid;
-        database().ref('Users/' + uid).on('value', snapshot => this.setState({ currentUsername: snapshot.val().userName }))
+        database().ref('Users/' + uid).on('value', snapshot => this.setState({
+            currentUsername: snapshot.val().userName,
+            colorPalette: snapshot.val().colorPalette,
+            isDarkMode: snapshot.val().isDarkMode
+        }))
     };
 
     toggleModal = () => {
@@ -46,21 +53,26 @@ class YouScreen extends Component {
 
 
     render() {
-        const { currentUsername } = this.state;
+        const { colorPalette, isDarkMode } = this.state;
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }]}>
                 <ScrollView style={{ flex: 2 }}>
-                    <View style={{ justifyContent: "center", alignItems: 'center' }}>
-                        <Text style={styles.currentUsername}>{currentUsername}</Text>
-                        <TouchableOpacity style={styles.button} onPress={this.toggleModal}>
-                            <Text>{string.profile}</Text>
+                    <View style={{ margin: 25 }}>
+                        <TouchableOpacity
+                            onPress={this.toggleModal}
+                        >
+                            <Text style={{ fontFamily: 'sofialight', fontSize: 30, color: color[colorPalette].level3 }} >{string.profile}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.button}>
-                            <Text>{string.contact}</Text>
+                        <TouchableOpacity>
+                            <Text style={{ fontFamily: 'sofialight', fontSize: 30, color: color[colorPalette].level3 }} >{string.contact}</Text>
                         </TouchableOpacity>
 
                     </View>
                 </ScrollView>
+                <View style={{ justifyContent: "center", alignItems: 'center', marginBottom: 20 }}>
+                    <Text style={{ fontFamily: 'sofialight', fontSize: 15, color: color[colorPalette].level5 }} >{string.yourThings}</Text>
+
+                </View>
                 {/* <Image
                     source={{ uri: this.state.uri }}
                     height={80}
@@ -81,7 +93,7 @@ class YouScreen extends Component {
                             { uri: "https://luehangs.site/pic-chat-app-images/beautiful-beautiful-woman-beauty-9763.jpg" },
                             { uri: "https://images.pexels.com/photos/3363331/pexels-photo-3363331.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
                         ]}
-                        spacing={3}
+                        spacing={7}
                         imageContainerStyle={styles.imageStyle}
                     />
                 </View>
@@ -159,6 +171,7 @@ const styles = StyleSheet.create({
     },
     imageStyle: {
         borderRadius: 20,
+        backgroundColor: 'white'
     },
     buttonClose: {
         borderBottomLeftRadius: 20,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
 
 import MapView, { Marker } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -9,6 +9,7 @@ import auth from "@react-native-firebase/auth";
 
 import Pulse from 'react-native-pulse';
 
+import { color } from '../assets/color/color';
 import { string } from '../strings/en';
 
 class FindPeopleAround extends Component {
@@ -26,7 +27,9 @@ class FindPeopleAround extends Component {
             Uids: new Set(),
             usersAround: new Set(),
             isShowPulse: false,
-            isShowFindButton: true
+            isShowFindButton: true,
+            colorPalette: 'default',
+            isDarkMode: false
         };
     };
 
@@ -47,6 +50,11 @@ class FindPeopleAround extends Component {
             .on('value', snapshot => {
                 this.setState({ allUsersData: snapshot.val() })
             })
+        const uid = auth().currentUser.uid;
+        database().ref('Users/' + uid).on('value', snapshot => this.setState({
+            colorPalette: snapshot.val().colorPalette,
+            isDarkMode: snapshot.val().isDarkMode
+        }))
     }
 
     getUserPlacesInfo() {
@@ -98,7 +106,7 @@ class FindPeopleAround extends Component {
     };
 
     render() {
-        const { latitude, longitude, latitudeDelta, longitudeDelta } = this.state;
+        const { latitude, longitude, latitudeDelta, longitudeDelta, isDarkMode, colorPalette } = this.state;
         const region = {
             latitude: latitude,
             longitude: longitude,
@@ -106,7 +114,7 @@ class FindPeopleAround extends Component {
             longitudeDelta: 0.05,
         }
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, { backgroundColor: isDarkMode ? color.darkBackgroundColor : color.lightBackgroundColor }]}>
                 {/* {this.getLocation()} */}
                 {/* <View style={styles.map}>
                     <MapView
@@ -126,19 +134,37 @@ class FindPeopleAround extends Component {
                     </MapView>
                 </View> */}
                 {this.state.isShowPulse ? (
-                    <Pulse color='red' numPulses={3} diameter={400} speed={10} duration={1000} />
+                    <Pulse color={color[colorPalette].level5} numPulses={5} diameter={400} speed={10} duration={1000} />
                 ) : (null)}
-                <TouchableOpacity style={styles.findButton} onPress={this.findUsersAround}>
-                    <Text style={styles.findText}> {string.findHomemate} </Text>
+
+                <TouchableOpacity style={{
+                    height: 80,
+                    width: 80,
+                    borderRadius: 40,
+                    backgroundColor: color[colorPalette].level3,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 50
+                }}
+                    onPress={this.findUsersAround}>
+                    <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: color[colorPalette].level2, justifyContent: "center", alignItems: 'center' }}>
+                        <Image
+                            style={{ width: 30, height: 30 }}
+                            source={require('../assets/imgs/find.png')}
+                        />
+                    </View>
+
                 </TouchableOpacity>
-                <View style={{ height: 300, width: 100 }}>
+                <View style={{
+                    height: 300, width: '100%', justifyContent: "center", alignItems: "center", marginTop: 50
+                }}>
                     <ScrollView>
                         {this.state.Uids.size > 0 ? Array.from(this.state.usersAround).map(item =>
                             (
                                 <Text style={{ color: 'red' }}> {item} </Text>
                             )
                         ) : (
-                                <Text>Find Again</Text>
+                                <Text style={{ fontFamily: 'sofialight', color: color[colorPalette].level3 }} >Seem like you are the one here</Text>
                             )}
                     </ScrollView>
                 </View>
